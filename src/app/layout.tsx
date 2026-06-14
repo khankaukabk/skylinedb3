@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-// Absolute URL to your premium brand hallmark for rich social link unfurling
-const OG_IMAGE_URL = "https://firebasestorage.googleapis.com/v0/b/growshare-capital.firebasestorage.app/o/Logo%2FSBD.png?alt=media&token=07ed4301-023d-42fa-9f69-2f3b789c8406";
+// Your Firebase Logo URL
+const LOGO_URL = "https://firebasestorage.googleapis.com/v0/b/skylinedb3-e8295.firebasestorage.app/o/Logo%2FSBD.png?alt=media&token=f5776d7f-6da0-447b-a4ee-36d13c24dc73";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.skylinedb3.com"),
   title: {
-    default: "Skyline Architects — Where Vision Meets Structure",
-    template: "%s | Skyline Architects",
+    default: "SkylineDB3 — Where Vision Meets Structure",
+    template: "%s | SkylineDB3",
   },
   description:
-    "Skyline Architects is an award-winning architecture firm crafting landmark residential, commercial, and cultural spaces across the globe. A GrowShare Capital entity.",
+    "SkylineDB3 is an award-winning architecture firm crafting landmark residential, commercial, and cultural spaces across the globe. A GrowShare Capital entity.",
   keywords: [
-    "Skyline Architects",
+    "SkylineDB3",
     "architecture firm",
     "masterplanning",
     "luxury design build",
@@ -23,25 +23,29 @@ export const metadata: Metadata = {
     "Memphis architects",
     "GrowShare Capital"
   ],
-  authors: [{ name: "Skyline Architects" }],
-  creator: "Skyline Architects",
+  authors: [{ name: "SkylineDB3" }],
+  creator: "SkylineDB3",
   publisher: "GrowShare Capital",
+  icons: {
+    icon: LOGO_URL, // This adds your logo to the browser tab!
+    apple: LOGO_URL,
+  },
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: "Skyline Architects — Where Vision Meets Structure",
+    title: "SkylineDB3 — Where Vision Meets Structure",
     description: "Award-winning global architecture and integrated masterplanning. A GrowShare Capital entity.",
     url: "https://www.skylinedb3.com",
-    siteName: "Skyline Architects",
+    siteName: "SkylineDB3",
     images: [
       {
-        url: OG_IMAGE_URL,
+        url: LOGO_URL,
         width: 1200,
         height: 630,
-        alt: "Skyline Architects — Premium Global Architecture & Masterplanning",
+        alt: "SkylineDB3 — Premium Global Architecture & Masterplanning",
       },
     ],
     locale: "en_US",
@@ -49,9 +53,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Skyline Architects — Where Vision Meets Structure",
+    title: "SkylineDB3 — Where Vision Meets Structure",
     description: "Award-winning global architecture and integrated masterplanning. A GrowShare Capital entity.",
-    images: [OG_IMAGE_URL],
+    images: [LOGO_URL],
   },
   robots: {
     index: true,

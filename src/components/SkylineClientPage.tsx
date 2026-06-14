@@ -18,7 +18,7 @@ function cn(...classes: (string | undefined | null | false)[]) {
 const LOGO_URL = "https://firebasestorage.googleapis.com/v0/b/skylinedb3-e8295.firebasestorage.app/o/Logo%2FSBD.png?alt=media&token=f5776d7f-6da0-447b-a4ee-36d13c24dc73";
 const SUPPORT_NUMBER_DIGITS = "2052351664";
 const SUPPORT_NUMBER_FORMATTED = "(205) 235-1664";
-const SMS_BODY_MSG = "Hello Skyline Team, I am interested in commissioning an architectural evaluation.";
+const SMS_BODY_MSG = "Hello SkylineDB3 Team, I am interested in commissioning an architectural evaluation.";
 const SMS_LINK = `sms:+1${SUPPORT_NUMBER_DIGITS}?body=${encodeURIComponent(SMS_BODY_MSG)}`;
 
 // --- DATA ARRAYS ---
@@ -34,10 +34,29 @@ const SHOWROOM_MODELS = [
     { id: "townhome", tabLabel: "Townhome Concept", title: "Meridian Multi-Family", embedUrl: "https://sketchfab.com/models/7dd66c4217114bd5ab9ee7e28afed36d/embed?autostart=0&ui_theme=dark&dnt=1", description: "High-density horizontal living. The structural grid eliminates internal load-bearing walls, allowing developers fluid spatial re-allocation.", specs: [{ icon: <Maximize className="w-4 h-4" />, label: "Density", value: "12 Units / Acre" }, { icon: <Layers className="w-4 h-4" />, label: "Core Material", value: "Steel Frame & Glass" }, { icon: <Target className="w-4 h-4" />, label: "Target Market", value: "Premium Build-to-Rent" }] }
 ];
 
+// Project categories restored for the Before/After execution matrix
 const PROCESS_PROJECTS = [
-    { id: "residential", title: "Verde Private Estate", category: "Residential Architecture", stages: [{ name: "Consultation", image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2500&auto=format&fit=crop" }, { name: "Sketch", image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2500&auto=format&fit=crop" }, { name: "2D Plan", image: "https://images.unsplash.com/photo-1536895058696-a69b1c7ba34d?q=80&w=2500&auto=format&fit=crop" }, { name: "3D Model", image: "https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2500&auto=format&fit=crop&grayscale=1" }, { name: "Final Render", image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2500&auto=format&fit=crop" }] },
-    { id: "commercial", title: "The Apex Hub", category: "Commercial Real Estate", stages: [{ name: "Sketch", image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2500&auto=format&fit=crop" }, { name: "3D Model", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop&grayscale=1" }, { name: "Final Render", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop" }, { name: "Construction Doc", image: "https://images.unsplash.com/photo-1536895058696-a69b1c7ba34d?q=80&w=2500&auto=format&fit=crop" }] },
-    { id: "masterplan", title: "Foundry55 Sector", category: "Masterplan Development", stages: [{ name: "Concept", image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2500&auto=format&fit=crop" }, { name: "3D Model", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop&grayscale=1" }, { name: "Render", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop" }, { name: "Marketing Content", image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=2500&auto=format&fit=crop" }] }
+    {
+        id: "residential",
+        title: "Verde Private Estate",
+        category: "Residential Architecture",
+        before: { name: "Architectural Sketch", image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2500&auto=format&fit=crop" },
+        after: { name: "Final Render", image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2500&auto=format&fit=crop" }
+    },
+    {
+        id: "commercial",
+        title: "The Apex Hub",
+        category: "Commercial Real Estate",
+        before: { name: "3D Massing Model", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop&grayscale=1" },
+        after: { name: "Market Ready Render", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop" }
+    },
+    {
+        id: "masterplan",
+        title: "Foundry55 Sector",
+        category: "Masterplan Development",
+        before: { name: "Zoning Concept", image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2500&auto=format&fit=crop" },
+        after: { name: "Completed Sector", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop" }
+    }
 ];
 
 const SERVICES = [
@@ -98,7 +117,7 @@ export default function SkylineClientPage() {
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const [activeModelIndex, setActiveModelIndex] = useState(0);
     const [activeProcessProject, setActiveProcessProject] = useState(0);
-    const [activeStage, setActiveStage] = useState(0);
+    const [compareSliderPos, setCompareSliderPos] = useState(50);
 
     // UI States
     const [showUpdateBanner, setShowUpdateBanner] = useState(true);
@@ -129,9 +148,18 @@ export default function SkylineClientPage() {
         setTimeout(() => setIsAutoPlaying(true), 10000);
     };
 
-    // Reset process stages on project switch
+    // Section 3: Navigation for Before/After Slider
+    const nextProcessProject = useCallback(() => {
+        setActiveProcessProject((prev) => (prev === PROCESS_PROJECTS.length - 1 ? 0 : prev + 1));
+    }, []);
+
+    const prevProcessProject = useCallback(() => {
+        setActiveProcessProject((prev) => (prev === 0 ? PROCESS_PROJECTS.length - 1 : prev - 1));
+    }, []);
+
+    // Reset Before/After slider to 50% when project changes
     useEffect(() => {
-        setActiveStage(0);
+        setCompareSliderPos(50);
     }, [activeProcessProject]);
 
     // Lock body scroll when mobile menu is open
@@ -173,18 +201,18 @@ export default function SkylineClientPage() {
                 )}
             </AnimatePresence>
 
-            {/* GLOBAL NAVIGATION */}
-            <header className="fixed top-0 left-0 w-full z-50 bg-gradient-to-b from-black/80 via-black/40 to-transparent pt-4 md:pt-6 pb-12 px-5 md:px-12 flex justify-between items-center pointer-events-none">
+            {/* DEDICATED GLOBAL NAVBAR */}
+            <header className="fixed top-0 left-0 w-full z-50 bg-neutral-950/80 backdrop-blur-xl border-b border-white/10 py-4 px-5 md:px-12 flex justify-between items-center transition-all duration-300">
                 <div className="flex items-center gap-4 pointer-events-auto">
-                    <div className="relative w-28 h-8 md:w-48 md:h-14">
-                        {/* Logo with filters removed so original colors display */}
-                        <Image src={LOGO_URL} alt="Skyline Architects" fill className="object-contain object-left opacity-95" priority sizes="(max-width: 768px) 120px, 200px" />
-                    </div>
+                    <Link href="/">
+                        <div className="relative w-28 h-8 md:w-48 md:h-12 hover:opacity-80 transition-opacity">
+                            <Image src={LOGO_URL} alt="SkylineDB3" fill className="object-contain object-left opacity-95" priority sizes="(max-width: 768px) 120px, 200px" />
+                        </div>
+                    </Link>
                 </div>
 
                 <nav className="hidden md:flex items-center gap-10 text-[10px] uppercase tracking-[0.3em] font-medium text-white/90 pointer-events-auto">
-                    <a href="#showroom" className="hover:text-amber-400 transition-colors">Showroom</a>
-                    <a href="#process" className="hover:text-amber-400 transition-colors">Process</a>
+                    <Link href="/projects" className="hover:text-amber-400 transition-colors">Projects</Link>
                     <a href="#services" className="hover:text-amber-400 transition-colors">Services</a>
                     <a href="#team" className="hover:text-amber-400 transition-colors">Team</a>
                     <a href="#contact" className="text-amber-400 hover:text-white transition-colors font-bold">Connect</a>
@@ -208,18 +236,17 @@ export default function SkylineClientPage() {
                             <X className="w-8 h-8" strokeWidth={1.5} />
                         </button>
                         <nav className="flex flex-col gap-8 text-2xl font-serif text-white/80 tracking-wide">
-                            <a href="#showroom" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Interactive Showroom</a>
-                            <a href="#process" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Execution Matrix</a>
-                            <a href="#services" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Disciplines</a>
-                            <a href="#team" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Leadership</a>
-                            <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="text-amber-500 font-bold mt-4">Connect with Firm</a>
+                            <Link href="/projects" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Projects</Link>
+                            <a href="#services" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Services</a>
+                            <a href="#team" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Team</a>
+                            <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="text-amber-500 font-bold mt-4">Connect</a>
                         </nav>
                     </motion.div>
                 )}
             </AnimatePresence>
 
             {/* SECTION 1: HERO SHOWCASE SLIDER */}
-            <section id="projects" className="relative w-full h-[100svh] overflow-hidden bg-black">
+            <section id="hero" className="relative w-full h-[100svh] overflow-hidden bg-black pt-20">
                 <AnimatePresence mode="popLayout">
                     <motion.div
                         key={currentSlide}
@@ -273,35 +300,34 @@ export default function SkylineClientPage() {
             </section>
 
             {/* SECTION 2: INTERACTIVE SHOWROOM */}
-            <section id="showroom" className="py-16 md:py-40 px-5 md:px-12 bg-white relative border-b border-neutral-200">
+            <section id="showroom" className="py-16 md:py-32 px-5 md:px-12 bg-white relative border-b border-neutral-200">
                 <div className="max-w-[1400px] mx-auto">
-                    <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 md:gap-8 mb-8 md:mb-16">
-                        <div>
-                            <span className="text-amber-800 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
-                                Interactive Showroom
-                            </span>
-                            <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tight">
-                                Structural Prototyping.
-                            </h2>
-                        </div>
 
-                        <div className="flex items-center gap-1 md:gap-4 border-b border-neutral-200 pb-[-1px] overflow-x-auto no-scrollbar snap-x">
-                            {SHOWROOM_MODELS.map((model, idx) => (
-                                <button
-                                    key={model.id}
-                                    onClick={() => setActiveModelIndex(idx)}
-                                    className={cn(
-                                        "px-3 md:px-4 py-3 text-[9px] md:text-xs font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] transition-all duration-300 relative font-sans whitespace-nowrap snap-start",
-                                        activeModelIndex === idx ? "text-neutral-900" : "text-neutral-400 hover:text-neutral-600"
-                                    )}
-                                >
-                                    {model.tabLabel}
-                                    {activeModelIndex === idx && (
-                                        <motion.div layoutId="activeTabIndicator" className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-800" initial={false} transition={{ type: "spring", stiffness: 300, damping: 30 }} />
-                                    )}
-                                </button>
-                            ))}
-                        </div>
+                    <div className="flex flex-col items-center text-center mb-8 md:mb-12">
+                        <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-amber-600 tracking-tight uppercase">
+                            Interactive Showroom
+                        </h2>
+                    </div>
+
+                    <div className="flex justify-center items-center gap-4 md:gap-8 border-b border-neutral-200 mb-10 md:mb-16 overflow-x-auto no-scrollbar snap-x w-full px-4 relative">
+                        {SHOWROOM_MODELS.map((model, idx) => (
+                            <button
+                                key={model.id}
+                                onClick={(e) => {
+                                    setActiveModelIndex(idx);
+                                    e.currentTarget.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                                }}
+                                className={cn(
+                                    "px-2 md:px-6 py-4 text-[10px] md:text-sm font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] transition-all duration-300 relative font-sans whitespace-nowrap snap-center",
+                                    activeModelIndex === idx ? "text-amber-600" : "text-neutral-400 hover:text-neutral-600"
+                                )}
+                            >
+                                {model.tabLabel}
+                                {activeModelIndex === idx && (
+                                    <motion.div layoutId="activeTabIndicator" className="absolute bottom-0 left-0 right-0 h-[3px] bg-amber-600" initial={false} transition={{ type: "spring", stiffness: 300, damping: 30 }} />
+                                )}
+                            </button>
+                        ))}
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
@@ -340,26 +366,25 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            {/* SECTION 3: VISION TO REALITY */}
+            {/* SECTION 3: VISION TO REALITY (BEFORE/AFTER SYSTEM) */}
             <section id="process" className="py-16 md:py-40 px-5 md:px-12 bg-neutral-950 text-white relative">
                 <div className="max-w-[1400px] mx-auto">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 mb-8 md:mb-12">
-                        <div>
-                            <span className="text-amber-500 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
-                                Execution Matrix
-                            </span>
-                            <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight">
-                                Vision to Reality.
-                            </h2>
-                        </div>
 
-                        <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-col items-center text-center mb-10 md:mb-16">
+                        <span className="text-amber-500 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
+                            Execution Matrix
+                        </span>
+                        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight mb-8 md:mb-12">
+                            Vision to Reality.
+                        </h2>
+
+                        <div className="flex flex-wrap justify-center gap-2 md:gap-4">
                             {PROCESS_PROJECTS.map((project, idx) => (
                                 <button
                                     key={project.id}
                                     onClick={() => setActiveProcessProject(idx)}
                                     className={cn(
-                                        "px-3 md:px-4 py-2 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border transition-all duration-300 rounded-sm font-sans flex-grow md:flex-grow-0",
+                                        "px-4 py-2.5 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border transition-all duration-300 rounded-sm font-sans flex-grow md:flex-grow-0",
                                         activeProcessProject === idx ? "border-amber-500 bg-amber-500/10 text-amber-400" : "border-neutral-800 text-neutral-500 hover:border-neutral-600 hover:text-neutral-300"
                                     )}
                                 >
@@ -370,47 +395,75 @@ export default function SkylineClientPage() {
                     </div>
 
                     <div className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl">
+
                         <AnimatePresence mode="wait">
-                            <motion.div key={`${activeProcessProject}-${activeStage}`} initial={{ opacity: 0, filter: "blur(10px)" }} animate={{ opacity: 1, filter: "blur(0px)" }} exit={{ opacity: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} className="absolute inset-0">
-                                <Image src={PROCESS_PROJECTS[activeProcessProject].stages[activeStage].image} alt={PROCESS_PROJECTS[activeProcessProject].stages[activeStage].name} fill className="object-cover object-center opacity-80" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 md:to-black/10" />
+                            <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0">
+
+                                {/* AFTER IMAGE */}
+                                <Image
+                                    src={PROCESS_PROJECTS[activeProcessProject].after.image}
+                                    alt={PROCESS_PROJECTS[activeProcessProject].after.name}
+                                    fill
+                                    className="object-cover object-center opacity-90"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px"
+                                />
+
+                                {/* BEFORE IMAGE (Clipped by Slider) */}
+                                <div className="absolute inset-0 z-10" style={{ clipPath: `inset(0 ${100 - compareSliderPos}% 0 0)` }}>
+                                    <Image
+                                        src={PROCESS_PROJECTS[activeProcessProject].before.image}
+                                        alt={PROCESS_PROJECTS[activeProcessProject].before.name}
+                                        fill
+                                        className="object-cover object-center opacity-90"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px"
+                                    />
+                                </div>
+
+                                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/90 to-transparent z-10 pointer-events-none" />
+
+                                <div className="absolute top-4 md:top-6 left-4 md:left-6 z-20 pointer-events-none bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-sm border border-white/10 hidden sm:block">
+                                    <p className="text-white text-[8px] md:text-[9px] uppercase tracking-widest font-bold font-sans">
+                                        Before: <span className="text-amber-500">{PROCESS_PROJECTS[activeProcessProject].before.name}</span>
+                                    </p>
+                                </div>
+                                <div className="absolute top-4 md:top-6 right-4 md:right-6 z-20 pointer-events-none bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-sm border border-white/10 hidden sm:block">
+                                    <p className="text-white text-[8px] md:text-[9px] uppercase tracking-widest font-bold font-sans">
+                                        After: <span className="text-amber-500">{PROCESS_PROJECTS[activeProcessProject].after.name}</span>
+                                    </p>
+                                </div>
+
+                                <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-20 pointer-events-none px-4">
+                                    <h3 className="font-serif text-2xl md:text-4xl text-white drop-shadow-lg">
+                                        {PROCESS_PROJECTS[activeProcessProject].title}
+                                    </h3>
+                                </div>
+
                             </motion.div>
                         </AnimatePresence>
 
-                        <div className="absolute top-6 left-5 md:top-10 md:left-10 z-20">
-                            <h3 className="font-serif text-xl md:text-4xl text-white drop-shadow-lg">{PROCESS_PROJECTS[activeProcessProject].title}</h3>
-                            <p className="text-amber-500 text-[8px] md:text-[9px] uppercase tracking-[0.3em] font-bold mt-1.5 md:mt-2">Stage: {PROCESS_PROJECTS[activeProcessProject].stages[activeStage].name}</p>
-                        </div>
-
-                        <div className="absolute bottom-6 md:bottom-8 left-0 w-full px-4 md:px-16 z-30">
-                            <div className="relative w-full h-12 flex items-center">
-                                <div className="absolute left-0 w-full h-[1px] bg-neutral-700" />
-                                <motion.div
-                                    className="absolute top-0 bottom-0 w-[2px] bg-amber-500 z-10 drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]"
-                                    animate={{ left: `${(activeStage / (PROCESS_PROJECTS[activeProcessProject].stages.length - 1)) * 100}%` }}
-                                    transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                                />
-                                <div className="absolute w-full flex justify-between items-center z-20">
-                                    {PROCESS_PROJECTS[activeProcessProject].stages.map((stage, idx) => (
-                                        <button
-                                            key={idx}
-                                            onClick={() => setActiveStage(idx)}
-                                            className="group relative flex flex-col items-center justify-center w-10 h-10 md:w-8 md:h-8 focus:outline-none"
-                                            aria-label={`View stage: ${stage.name}`}
-                                        >
-                                            <div className={cn("w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all duration-300", activeStage >= idx ? "bg-amber-500 scale-125" : "bg-neutral-600 group-hover:bg-neutral-400 group-hover:scale-110")} />
-                                            <span className={cn(
-                                                "absolute whitespace-nowrap text-[7px] md:text-[9px] uppercase tracking-[0.1em] md:tracking-[0.2em] font-bold transition-all duration-300",
-                                                idx % 2 === 0 ? "top-8" : "bottom-8 md:top-8",
-                                                activeStage === idx ? "text-amber-400 opacity-100" : "text-neutral-500 opacity-0 md:group-hover:opacity-100"
-                                            )}>
-                                                {stage.name}
-                                            </span>
-                                        </button>
-                                    ))}
-                                </div>
+                        <div className="absolute top-0 bottom-0 w-[2px] bg-amber-500 z-20 pointer-events-none drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]" style={{ left: `${compareSliderPos}%` }}>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full flex items-center justify-center shadow-xl border-2 border-white">
+                                <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white ml-0.5" strokeWidth={3} />
+                                <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white -ml-2 mr-0.5" strokeWidth={3} />
                             </div>
                         </div>
+
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={compareSliderPos}
+                            onChange={(e) => setCompareSliderPos(Number(e.target.value))}
+                            className="absolute inset-0 z-30 opacity-0 cursor-ew-resize w-full h-full"
+                            aria-label="Before/After Slider"
+                        />
+
+                        <button onClick={prevProcessProject} className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-amber-600 text-white rounded-full p-2 md:p-3 transition-colors backdrop-blur-md border border-white/10" aria-label="Previous Project">
+                            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" strokeWidth={2} />
+                        </button>
+                        <button onClick={nextProcessProject} className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-amber-600 text-white rounded-full p-2 md:p-3 transition-colors backdrop-blur-md border border-white/10" aria-label="Next Project">
+                            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" strokeWidth={2} />
+                        </button>
                     </div>
                 </div>
             </section>
@@ -420,10 +473,10 @@ export default function SkylineClientPage() {
                 <div className="max-w-[1400px] mx-auto">
                     <div className="text-left md:text-center mb-10 md:mb-24">
                         <span className="text-amber-800 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
-                            Core Competencies
+                            Services Overview
                         </span>
                         <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tight">
-                            Architectural Disciplines.
+                            Architectural Services.
                         </h2>
                     </div>
 
@@ -480,7 +533,7 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            {/* RESTORED LUXURY FOOTER */}
+            {/* LUXURY FOOTER */}
             <footer id="contact" className="py-20 md:py-40 px-5 md:px-6 bg-white border-t border-neutral-200 relative z-10 text-center">
                 <div className="max-w-2xl mx-auto">
                     <div className="w-[1px] h-12 md:h-16 bg-amber-900/30 mx-auto mb-8 md:mb-12" />
@@ -507,7 +560,7 @@ export default function SkylineClientPage() {
 
                         <div className="space-y-1.5 md:space-y-2 pt-1 md:pt-2">
                             <span className="font-serif text-xs md:text-sm tracking-[0.3em] md:tracking-[0.4em] text-neutral-900 block uppercase">
-                                Skyline Architects
+                                SkylineDB3
                             </span>
                             <div className="flex items-center justify-center gap-2 md:gap-3 text-[8px] md:text-[9px] tracking-[0.2em] md:tracking-[0.3em] uppercase text-neutral-400">
                                 <span className="h-[1px] w-4 md:w-6 bg-neutral-200"></span>
@@ -517,7 +570,7 @@ export default function SkylineClientPage() {
                         </div>
 
                         <span className="block text-[7px] md:text-[8px] tracking-widest text-neutral-300 uppercase">
-                            © {new Date().getFullYear()} Skyline Design + Build. All Planes Reserved.
+                            © {new Date().getFullYear()} SkylineDB3. All Planes Reserved.
                         </span>
                     </div>
                 </div>
