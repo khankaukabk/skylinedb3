@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    ChevronLeft, ChevronRight, ArrowRight, Layers,
+    ChevronLeft, ChevronRight, Layers,
     Maximize, Target, MapPin, Building2, Home, Box, X, Menu
 } from 'lucide-react';
 import Image from 'next/image';
@@ -34,7 +34,6 @@ const SHOWROOM_MODELS = [
     { id: "townhome", tabLabel: "Townhome Concept", title: "Meridian Multi-Family", embedUrl: "https://sketchfab.com/models/7dd66c4217114bd5ab9ee7e28afed36d/embed?autostart=0&ui_theme=dark&dnt=1", description: "High-density horizontal living. The structural grid eliminates internal load-bearing walls, allowing developers fluid spatial re-allocation.", specs: [{ icon: <Maximize className="w-4 h-4" />, label: "Density", value: "12 Units / Acre" }, { icon: <Layers className="w-4 h-4" />, label: "Core Material", value: "Steel Frame & Glass" }, { icon: <Target className="w-4 h-4" />, label: "Target Market", value: "Premium Build-to-Rent" }] }
 ];
 
-// Project categories restored for the Before/After execution matrix
 const PROCESS_PROJECTS = [
     {
         id: "residential",
@@ -367,24 +366,25 @@ export default function SkylineClientPage() {
             </section>
 
             {/* SECTION 3: VISION TO REALITY (BEFORE/AFTER SYSTEM) */}
-            <section id="process" className="py-16 md:py-40 px-5 md:px-12 bg-neutral-950 text-white relative">
+            <section id="process" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-950 text-white relative">
                 <div className="max-w-[1400px] mx-auto">
 
-                    <div className="flex flex-col items-center text-center mb-10 md:mb-16">
+                    <div className="flex flex-col items-center text-center mb-8 md:mb-12">
                         <span className="text-amber-500 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
                             Execution Matrix
                         </span>
-                        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight mb-8 md:mb-12">
+                        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight mb-8">
                             Vision to Reality.
                         </h2>
 
-                        <div className="flex flex-wrap justify-center gap-2 md:gap-4">
+                        {/* PROJECT TABS */}
+                        <div className="flex flex-wrap justify-center gap-2 md:gap-4 w-full">
                             {PROCESS_PROJECTS.map((project, idx) => (
                                 <button
                                     key={project.id}
                                     onClick={() => setActiveProcessProject(idx)}
                                     className={cn(
-                                        "px-4 py-2.5 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border transition-all duration-300 rounded-sm font-sans flex-grow md:flex-grow-0",
+                                        "px-4 py-2.5 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border transition-all duration-300 rounded-sm font-sans flex-grow sm:flex-grow-0",
                                         activeProcessProject === idx ? "border-amber-500 bg-amber-500/10 text-amber-400" : "border-neutral-800 text-neutral-500 hover:border-neutral-600 hover:text-neutral-300"
                                     )}
                                 >
@@ -394,7 +394,8 @@ export default function SkylineClientPage() {
                         </div>
                     </div>
 
-                    <div className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl">
+                    {/* DEDICATED IMAGE CONTAINER FOR SLIDER ONLY */}
+                    <div className="relative w-full aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl">
 
                         <AnimatePresence mode="wait">
                             <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0">
@@ -421,6 +422,7 @@ export default function SkylineClientPage() {
 
                                 <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/90 to-transparent z-10 pointer-events-none" />
 
+                                {/* DESKTOP LABELS */}
                                 <div className="absolute top-4 md:top-6 left-4 md:left-6 z-20 pointer-events-none bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-sm border border-white/10 hidden sm:block">
                                     <p className="text-white text-[8px] md:text-[9px] uppercase tracking-widest font-bold font-sans">
                                         Before: <span className="text-amber-500">{PROCESS_PROJECTS[activeProcessProject].before.name}</span>
@@ -441,6 +443,7 @@ export default function SkylineClientPage() {
                             </motion.div>
                         </AnimatePresence>
 
+                        {/* SLIDER LINE & HANDLE */}
                         <div className="absolute top-0 bottom-0 w-[2px] bg-amber-500 z-20 pointer-events-none drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]" style={{ left: `${compareSliderPos}%` }}>
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full flex items-center justify-center shadow-xl border-2 border-white">
                                 <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white ml-0.5" strokeWidth={3} />
@@ -448,6 +451,7 @@ export default function SkylineClientPage() {
                             </div>
                         </div>
 
+                        {/* INVISIBLE RANGE INPUT FOR MOBILE DRAGGING */}
                         <input
                             type="range"
                             min="0"
@@ -457,14 +461,35 @@ export default function SkylineClientPage() {
                             className="absolute inset-0 z-30 opacity-0 cursor-ew-resize w-full h-full"
                             aria-label="Before/After Slider"
                         />
+                    </div>
 
-                        <button onClick={prevProcessProject} className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-amber-600 text-white rounded-full p-2 md:p-3 transition-colors backdrop-blur-md border border-white/10" aria-label="Previous Project">
-                            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" strokeWidth={2} />
+                    {/* DEDICATED PROJECT NAVIGATION BAR (MOVED OUTSIDE IMAGE FOR MOBILE FRIENDLINESS) */}
+                    <div className="flex justify-between items-center mt-6 w-full max-w-sm mx-auto px-4 sm:px-0">
+                        <button
+                            onClick={prevProcessProject}
+                            className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors group py-2"
+                            aria-label="Previous Project"
+                        >
+                            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                            <span className="text-[10px] uppercase tracking-widest font-bold">Prev</span>
                         </button>
-                        <button onClick={nextProcessProject} className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-amber-600 text-white rounded-full p-2 md:p-3 transition-colors backdrop-blur-md border border-white/10" aria-label="Next Project">
-                            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" strokeWidth={2} />
+
+                        <div className="flex gap-2">
+                            {PROCESS_PROJECTS.map((_, idx) => (
+                                <div key={idx} className={cn("h-1 rounded-full transition-all duration-300", activeProcessProject === idx ? "w-6 bg-amber-500" : "w-1.5 bg-neutral-700")} />
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={nextProcessProject}
+                            className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors group py-2"
+                            aria-label="Next Project"
+                        >
+                            <span className="text-[10px] uppercase tracking-widest font-bold">Next</span>
+                            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </button>
                     </div>
+
                 </div>
             </section>
 
