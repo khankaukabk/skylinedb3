@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    ChevronLeft, ChevronRight, Layers,
+    ChevronLeft, ChevronRight, ArrowRight, Layers,
     Maximize, Target, MapPin, Building2, Home, Box, X, Menu
 } from 'lucide-react';
 import Image from 'next/image';
@@ -65,12 +65,6 @@ const SERVICES = [
     { title: "3D Visualization", icon: <Box className="w-6 h-6 stroke-[1.2]" />, description: "Photorealistic spatial rendering and real-time structural interaction, allowing exact verification prior to execution." }
 ];
 
-const TEAM = [
-    { name: "Ashif Jahan", title: "Chief Executive Officer", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1200&auto=format&fit=crop", bio: "Guiding the firm's strategic vision and ensuring global structural investments meet exact developmental thresholds." },
-    { name: "Jeff Blackledge", title: "Senior Architect", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1200&auto=format&fit=crop", bio: "Mastering the intersection of structural physics and aesthetic form to deliver uncompromising, landmark environments." },
-    { name: "Core Support Team", title: "Spatial Engineering & Delivery", image: "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?q=80&w=1200&auto=format&fit=crop", bio: "A multi-disciplinary unit executing complex architectural masterplans with absolute precision and zero variance." }
-];
-
 // --- SUB-COMPONENTS ---
 const MessageBubbleIcon = ({ className }: { className?: string }) => (
     <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -111,18 +105,14 @@ function FloatingInquiriesButton() {
 
 // --- MAIN PAGE COMPONENT ---
 export default function SkylineClientPage() {
-    // State Hooks
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const [activeModelIndex, setActiveModelIndex] = useState(0);
     const [activeProcessProject, setActiveProcessProject] = useState(0);
     const [compareSliderPos, setCompareSliderPos] = useState(50);
-
-    // UI States
     const [showUpdateBanner, setShowUpdateBanner] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // Section 1: Auto-play logic
     useEffect(() => {
         if (!isAutoPlaying) return;
         const timer = setInterval(() => setCurrentSlide((prev) => (prev === HERO_SLIDES.length - 1 ? 0 : prev + 1)), 7000);
@@ -147,7 +137,6 @@ export default function SkylineClientPage() {
         setTimeout(() => setIsAutoPlaying(true), 10000);
     };
 
-    // Section 3: Navigation for Before/After Slider
     const nextProcessProject = useCallback(() => {
         setActiveProcessProject((prev) => (prev === PROCESS_PROJECTS.length - 1 ? 0 : prev + 1));
     }, []);
@@ -156,12 +145,7 @@ export default function SkylineClientPage() {
         setActiveProcessProject((prev) => (prev === 0 ? PROCESS_PROJECTS.length - 1 : prev - 1));
     }, []);
 
-    // Reset Before/After slider to 50% when project changes
-    useEffect(() => {
-        setCompareSliderPos(50);
-    }, [activeProcessProject]);
-
-    // Lock body scroll when mobile menu is open
+    useEffect(() => setCompareSliderPos(50), [activeProcessProject]);
     useEffect(() => {
         if (isMobileMenuOpen) document.body.style.overflow = 'hidden';
         else document.body.style.overflow = 'unset';
@@ -172,7 +156,6 @@ export default function SkylineClientPage() {
 
             <FloatingInquiriesButton />
 
-            {/* FLOATING SYSTEM UPDATE BANNER */}
             <AnimatePresence>
                 {showUpdateBanner && (
                     <motion.div
@@ -200,7 +183,6 @@ export default function SkylineClientPage() {
                 )}
             </AnimatePresence>
 
-            {/* DEDICATED GLOBAL NAVBAR */}
             <header className="fixed top-0 left-0 w-full z-50 bg-neutral-950/80 backdrop-blur-xl border-b border-white/10 py-4 px-5 md:px-12 flex justify-between items-center transition-all duration-300">
                 <div className="flex items-center gap-4 pointer-events-auto">
                     <Link href="/">
@@ -213,7 +195,7 @@ export default function SkylineClientPage() {
                 <nav className="hidden md:flex items-center gap-10 text-[10px] uppercase tracking-[0.3em] font-medium text-white/90 pointer-events-auto">
                     <Link href="/projects" className="hover:text-amber-400 transition-colors">Projects</Link>
                     <a href="#services" className="hover:text-amber-400 transition-colors">Services</a>
-                    <a href="#team" className="hover:text-amber-400 transition-colors">Team</a>
+                    <Link href="/about" className="hover:text-amber-400 transition-colors">About</Link>
                     <a href="#contact" className="text-amber-400 hover:text-white transition-colors font-bold">Connect</a>
                 </nav>
 
@@ -222,7 +204,6 @@ export default function SkylineClientPage() {
                 </button>
             </header>
 
-            {/* MOBILE FULLSCREEN MENU OVERLAY */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
@@ -237,24 +218,16 @@ export default function SkylineClientPage() {
                         <nav className="flex flex-col gap-8 text-2xl font-serif text-white/80 tracking-wide">
                             <Link href="/projects" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Projects</Link>
                             <a href="#services" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Services</a>
-                            <a href="#team" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Team</a>
+                            <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">About</Link>
                             <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="text-amber-500 font-bold mt-4">Connect</a>
                         </nav>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* SECTION 1: HERO SHOWCASE SLIDER */}
             <section id="hero" className="relative w-full h-[100svh] overflow-hidden bg-black pt-20">
                 <AnimatePresence mode="popLayout">
-                    <motion.div
-                        key={currentSlide}
-                        initial={{ opacity: 0, scale: 1.05 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute inset-0 z-0"
-                    >
+                    <motion.div key={currentSlide} initial={{ opacity: 0, scale: 1.05 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }} className="absolute inset-0 z-0">
                         <div className="absolute inset-0 bg-black/30 md:bg-black/20 z-10" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent md:from-black/90 md:via-black/20 z-10" />
                         <Image src={HERO_SLIDES[currentSlide].image} alt={HERO_SLIDES[currentSlide].title} fill priority className="object-cover object-center" sizes="100vw" />
@@ -298,7 +271,6 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            {/* SECTION 2: INTERACTIVE SHOWROOM */}
             <section id="showroom" className="py-16 md:py-32 px-5 md:px-12 bg-white relative border-b border-neutral-200">
                 <div className="max-w-[1400px] mx-auto">
 
@@ -365,7 +337,6 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            {/* SECTION 3: VISION TO REALITY (BEFORE/AFTER SYSTEM) */}
             <section id="process" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-950 text-white relative">
                 <div className="max-w-[1400px] mx-auto">
 
@@ -377,7 +348,6 @@ export default function SkylineClientPage() {
                             Vision to Reality.
                         </h2>
 
-                        {/* PROJECT TABS */}
                         <div className="flex flex-wrap justify-center gap-2 md:gap-4 w-full">
                             {PROCESS_PROJECTS.map((project, idx) => (
                                 <button
@@ -394,35 +364,14 @@ export default function SkylineClientPage() {
                         </div>
                     </div>
 
-                    {/* DEDICATED IMAGE CONTAINER FOR SLIDER ONLY */}
                     <div className="relative w-full aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl">
-
                         <AnimatePresence mode="wait">
                             <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0">
-
-                                {/* AFTER IMAGE */}
-                                <Image
-                                    src={PROCESS_PROJECTS[activeProcessProject].after.image}
-                                    alt={PROCESS_PROJECTS[activeProcessProject].after.name}
-                                    fill
-                                    className="object-cover object-center opacity-90"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px"
-                                />
-
-                                {/* BEFORE IMAGE (Clipped by Slider) */}
+                                <Image src={PROCESS_PROJECTS[activeProcessProject].after.image} alt={PROCESS_PROJECTS[activeProcessProject].after.name} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
                                 <div className="absolute inset-0 z-10" style={{ clipPath: `inset(0 ${100 - compareSliderPos}% 0 0)` }}>
-                                    <Image
-                                        src={PROCESS_PROJECTS[activeProcessProject].before.image}
-                                        alt={PROCESS_PROJECTS[activeProcessProject].before.name}
-                                        fill
-                                        className="object-cover object-center opacity-90"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px"
-                                    />
+                                    <Image src={PROCESS_PROJECTS[activeProcessProject].before.image} alt={PROCESS_PROJECTS[activeProcessProject].before.name} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
                                 </div>
-
                                 <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/90 to-transparent z-10 pointer-events-none" />
-
-                                {/* DESKTOP LABELS */}
                                 <div className="absolute top-4 md:top-6 left-4 md:left-6 z-20 pointer-events-none bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-sm border border-white/10 hidden sm:block">
                                     <p className="text-white text-[8px] md:text-[9px] uppercase tracking-widest font-bold font-sans">
                                         Before: <span className="text-amber-500">{PROCESS_PROJECTS[activeProcessProject].before.name}</span>
@@ -433,17 +382,14 @@ export default function SkylineClientPage() {
                                         After: <span className="text-amber-500">{PROCESS_PROJECTS[activeProcessProject].after.name}</span>
                                     </p>
                                 </div>
-
                                 <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-20 pointer-events-none px-4">
                                     <h3 className="font-serif text-2xl md:text-4xl text-white drop-shadow-lg">
                                         {PROCESS_PROJECTS[activeProcessProject].title}
                                     </h3>
                                 </div>
-
                             </motion.div>
                         </AnimatePresence>
 
-                        {/* SLIDER LINE & HANDLE */}
                         <div className="absolute top-0 bottom-0 w-[2px] bg-amber-500 z-20 pointer-events-none drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]" style={{ left: `${compareSliderPos}%` }}>
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full flex items-center justify-center shadow-xl border-2 border-white">
                                 <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white ml-0.5" strokeWidth={3} />
@@ -451,40 +397,20 @@ export default function SkylineClientPage() {
                             </div>
                         </div>
 
-                        {/* INVISIBLE RANGE INPUT FOR MOBILE DRAGGING */}
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={compareSliderPos}
-                            onChange={(e) => setCompareSliderPos(Number(e.target.value))}
-                            className="absolute inset-0 z-30 opacity-0 cursor-ew-resize w-full h-full"
-                            aria-label="Before/After Slider"
-                        />
+                        <input type="range" min="0" max="100" value={compareSliderPos} onChange={(e) => setCompareSliderPos(Number(e.target.value))} className="absolute inset-0 z-30 opacity-0 cursor-ew-resize w-full h-full" aria-label="Before/After Slider" />
                     </div>
 
-                    {/* DEDICATED PROJECT NAVIGATION BAR (MOVED OUTSIDE IMAGE FOR MOBILE FRIENDLINESS) */}
                     <div className="flex justify-between items-center mt-6 w-full max-w-sm mx-auto px-4 sm:px-0">
-                        <button
-                            onClick={prevProcessProject}
-                            className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors group py-2"
-                            aria-label="Previous Project"
-                        >
+                        <button onClick={prevProcessProject} className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors group py-2" aria-label="Previous Project">
                             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                             <span className="text-[10px] uppercase tracking-widest font-bold">Prev</span>
                         </button>
-
                         <div className="flex gap-2">
                             {PROCESS_PROJECTS.map((_, idx) => (
                                 <div key={idx} className={cn("h-1 rounded-full transition-all duration-300", activeProcessProject === idx ? "w-6 bg-amber-500" : "w-1.5 bg-neutral-700")} />
                             ))}
                         </div>
-
-                        <button
-                            onClick={nextProcessProject}
-                            className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors group py-2"
-                            aria-label="Next Project"
-                        >
+                        <button onClick={nextProcessProject} className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors group py-2" aria-label="Next Project">
                             <span className="text-[10px] uppercase tracking-widest font-bold">Next</span>
                             <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </button>
@@ -493,7 +419,6 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            {/* SECTION 4: SERVICES OVERVIEW */}
             <section id="services" className="py-16 md:py-40 px-5 md:px-12 bg-[#F4F4F2] border-t border-neutral-200">
                 <div className="max-w-[1400px] mx-auto">
                     <div className="text-left md:text-center mb-10 md:mb-24">
@@ -523,43 +448,33 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            {/* SECTION 5: THE TEAM */}
-            <section id="team" className="py-16 md:py-40 px-5 md:px-12 bg-white border-t border-neutral-200 relative">
+            {/* NEW SECTION: STUDIO PHILOSOPHY TEASER */}
+            <section id="studio" className="py-16 md:py-40 px-5 md:px-12 bg-white border-t border-neutral-200 relative">
                 <div className="max-w-[1400px] mx-auto">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8 mb-10 md:mb-24">
-                        <div className="max-w-2xl text-left">
-                            <span className="text-amber-800 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
-                                Leadership
-                            </span>
-                            <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tight">
-                                The Design Principals.
-                            </h2>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+                        <div className="relative w-full aspect-[4/3] md:aspect-square bg-neutral-100 overflow-hidden rounded-sm">
+                            <Image src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2500&auto=format&fit=crop" alt="SkylineDB3 Studio Architecture" fill className="object-cover object-center grayscale hover:grayscale-0 transition-all duration-700" sizes="(max-width: 768px) 100vw, 50vw" />
                         </div>
-                        <p className="text-neutral-500 font-light text-xs md:text-base leading-relaxed border-l border-neutral-200 pl-4 md:pl-6 font-sans max-w-md">
-                            A highly calibrated collective of spatial engineers, masterplanners, and structural visionaries operating on a global scale.
-                        </p>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
-                        {TEAM.map((member, idx) => (
-                            <div key={idx} className="group cursor-default">
-                                <div className="relative w-full aspect-square md:aspect-[3/4] mb-4 md:mb-6 overflow-hidden bg-neutral-100 rounded-sm">
-                                    <Image src={member.image} alt={member.name} fill className="object-cover object-center grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px" />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                </div>
-                                <div className="border-l-2 border-amber-800/20 group-hover:border-amber-800 transition-colors pl-3 md:pl-4">
-                                    <h3 className="font-serif text-xl md:text-3xl text-neutral-900 mb-1">{member.name}</h3>
-                                    <p className="text-[8px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-amber-800 mb-3 md:mb-4 font-sans">{member.title}</p>
-                                    <p className="text-neutral-500 text-xs md:text-sm font-light leading-relaxed font-sans">{member.bio}</p>
-                                </div>
-                            </div>
-                        ))}
+                        <div className="text-left">
+                            <span className="text-amber-800 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
+                                The Studio
+                            </span>
+                            <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tight mb-6 md:mb-8">
+                                Uncompromising <br />Spatial Engineering.
+                            </h2>
+                            <p className="text-neutral-500 font-light text-sm md:text-lg leading-relaxed font-sans mb-8 md:mb-12">
+                                SkylineDB3 is a highly calibrated collective of spatial engineers, masterplanners, and structural visionaries operating on a global scale. We master the intersection of structural physics and aesthetic form to deliver landmark environments that meet strict developmental and fiscal thresholds.
+                            </p>
+                            <Link href="/about" className="inline-flex items-center justify-center border border-neutral-200 text-neutral-800 px-8 py-4 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] hover:border-amber-900 hover:text-amber-900 transition-colors font-sans rounded-sm group">
+                                Discover the Firm <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* LUXURY FOOTER */}
-            <footer id="contact" className="py-20 md:py-40 px-5 md:px-6 bg-white border-t border-neutral-200 relative z-10 text-center">
+            <footer id="contact" className="py-20 md:py-40 px-5 md:px-6 bg-[#F4F4F2] border-t border-neutral-200 relative z-10 text-center">
                 <div className="max-w-2xl mx-auto">
                     <div className="w-[1px] h-12 md:h-16 bg-amber-900/30 mx-auto mb-8 md:mb-12" />
                     <h2 className="font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl mb-6 md:mb-8 text-neutral-900 tracking-tight font-normal">Architect Certainty.</h2>
@@ -572,12 +487,12 @@ export default function SkylineClientPage() {
                             <span className="relative z-10 flex items-center justify-center gap-2.5"><MessageBubbleIcon className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" /> Private Client Advisory</span>
                             <div className="absolute inset-0 bg-amber-900 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                         </a>
-                        <a href="mailto:skylinedb3.team@gmail.com" className="w-full block border border-neutral-200 text-neutral-800 py-4 md:py-5 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] hover:border-neutral-900 transition-colors font-sans rounded-sm md:rounded-none">
+                        <a href="mailto:skylinedb3.team@gmail.com" className="w-full block border border-neutral-200 bg-white text-neutral-800 py-4 md:py-5 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] hover:border-neutral-900 transition-colors font-sans rounded-sm md:rounded-none">
                             Direct Dispatch
                         </a>
                     </div>
 
-                    <div className="mt-16 md:mt-24 pt-8 md:pt-12 border-t border-neutral-100 text-neutral-400 space-y-5 font-sans">
+                    <div className="mt-16 md:mt-24 pt-8 md:pt-12 border-t border-neutral-200 text-neutral-400 space-y-5 font-sans">
                         <div className="flex items-center justify-center gap-1.5 md:gap-2 text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.3em]">
                             <MapPin className="w-3 h-3 md:w-3.5 md:h-3.5 text-neutral-600 shrink-0" />
                             <span>3622 Central Ave, Memphis, TN</span>
@@ -588,13 +503,13 @@ export default function SkylineClientPage() {
                                 SkylineDB3
                             </span>
                             <div className="flex items-center justify-center gap-2 md:gap-3 text-[8px] md:text-[9px] tracking-[0.2em] md:tracking-[0.3em] uppercase text-neutral-400">
-                                <span className="h-[1px] w-4 md:w-6 bg-neutral-200"></span>
+                                <span className="h-[1px] w-4 md:w-6 bg-neutral-300"></span>
                                 <span>A <strong className="text-amber-900 font-normal">GrowShare Capital</strong> Company</span>
-                                <span className="h-[1px] w-4 md:w-6 bg-neutral-200"></span>
+                                <span className="h-[1px] w-4 md:w-6 bg-neutral-300"></span>
                             </div>
                         </div>
 
-                        <span className="block text-[7px] md:text-[8px] tracking-widest text-neutral-300 uppercase">
+                        <span className="block text-[7px] md:text-[8px] tracking-widest text-neutral-400 uppercase">
                             © {new Date().getFullYear()} SkylineDB3. All Planes Reserved.
                         </span>
                     </div>
