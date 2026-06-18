@@ -3,11 +3,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    ChevronLeft, ChevronRight, ArrowRight, Layers,
-    Maximize, Target, MapPin, Building2, Home, Box, X, Menu
+    ChevronLeft, ChevronRight, ArrowRight, MapPin, Building2, Home, Box, X, Menu
 } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 
 // --- UTILITIES ---
 function cn(...classes: (string | undefined | null | false)[]) {
@@ -26,12 +24,6 @@ const HERO_SLIDES = [
     { id: 1, image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop", title: "Foundry55: Industrial Living", description: "Master-planned residential sector. Integrated architectural engineering guaranteeing structural vision and ROI integrity from foundation to occupancy." },
     { id: 2, image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop", title: "The Apex Commercial Hub", description: "A structural monolith designed for immediate market readiness, minimizing operational friction for premium corporate tenants." },
     { id: 3, image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2500&auto=format&fit=crop", title: "Lumina Cultural Center", description: "Civic architecture engineered to anchor community development while maintaining strict fiscal parameters and maximum spatial yield." }
-];
-
-const SHOWROOM_MODELS = [
-    { id: "villa", tabLabel: "Modern Villa", title: "Vanguard Private Residence", embedUrl: "https://sketchfab.com/models/4a10fb417eb74e92be96180aee1b9338/embed?autostart=0&ui_theme=dark&dnt=1", description: "A cantilevered structural marvel optimized for severe coastal topography. Designed to maximize panoramic light capture while minimizing foundation footprint.", specs: [{ icon: <Maximize className="w-4 h-4" />, label: "Gross Floor Area", value: "8,500 Sq Ft" }, { icon: <Layers className="w-4 h-4" />, label: "Core Material", value: "Board-Formed Concrete" }, { icon: <Target className="w-4 h-4" />, label: "Target Market", value: "Ultra-HNW Residential" }] },
-    { id: "community", tabLabel: "Community Center", title: "Echo Civic Hub", embedUrl: "https://sketchfab.com/models/23118fa1b43949f5a5078dbb4c6e00b8/embed?autostart=0&ui_theme=dark&dnt=1", description: "Scalable municipal framework utilizing modular timber cross-laminates. Accelerates public sector delivery timelines by 40%.", specs: [{ icon: <Maximize className="w-4 h-4" />, label: "Gross Floor Area", value: "24,000 Sq Ft" }, { icon: <Layers className="w-4 h-4" />, label: "Core Material", value: "Cross-Laminated Timber (CLT)" }, { icon: <Target className="w-4 h-4" />, label: "Target Market", value: "Municipal / Public Sector" }] },
-    { id: "townhome", tabLabel: "Townhome Concept", title: "Meridian Multi-Family", embedUrl: "https://sketchfab.com/models/7dd66c4217114bd5ab9ee7e28afed36d/embed?autostart=0&ui_theme=dark&dnt=1", description: "High-density horizontal living. The structural grid eliminates internal load-bearing walls, allowing developers fluid spatial re-allocation.", specs: [{ icon: <Maximize className="w-4 h-4" />, label: "Density", value: "12 Units / Acre" }, { icon: <Layers className="w-4 h-4" />, label: "Core Material", value: "Steel Frame & Glass" }, { icon: <Target className="w-4 h-4" />, label: "Target Market", value: "Premium Build-to-Rent" }] }
 ];
 
 const PROCESS_PROJECTS = [
@@ -61,6 +53,12 @@ const PROCESS_PROJECTS = [
     }
 ];
 
+const SHOWROOM_ITEMS = [
+    { id: 'ext', title: "Exterior Facade", description: "Thermally broken structural glazing with automated environmental shading.", url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop" },
+    { id: 'int', title: "Lobby Atrium", description: "Triple-height structural volumes engineered to optimize pedestrian flow and acoustic damping.", url: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2500&auto=format&fit=crop" },
+    { id: 'ame', title: "Sky Terrace", description: "Cantilevered observation zones maximizing structural load efficiency and tenant ROI.", url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2500&auto=format&fit=crop" }
+];
+
 const SERVICES = [
     { title: "Land Planning", icon: <MapPin className="w-6 h-6 stroke-[1.2]" />, description: "Strategic terrain evaluation and zoning optimization designed to guarantee maximum parcel yield and regulatory compliance." },
     { title: "Masterplanning", icon: <Building2 className="w-6 h-6 stroke-[1.2]" />, description: "Comprehensive urban and sector frameworks seamlessly integrating infrastructure, commerce, and public transit corridors." },
@@ -68,9 +66,9 @@ const SERVICES = [
     { title: "3D Visualization", icon: <Box className="w-6 h-6 stroke-[1.2]" />, description: "Photorealistic spatial rendering and real-time structural interaction, allowing exact verification prior to execution." }
 ];
 
+// NOTICE: Showroom is intentionally excluded from the navigation links here
 const NAV_LINKS = [
     { label: "Home", href: "#hero" },
-    { label: "Showroom", href: "#showroom" },
     { label: "Process", href: "#process" },
     { label: "Services", href: "#services" },
     { label: "Team", href: "#team" },
@@ -119,12 +117,14 @@ function FloatingInquiriesButton() {
 export default function SkylineClientPage() {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-    const [activeModelIndex, setActiveModelIndex] = useState(0);
 
     // TRIPLE SLIDER STATE
     const [activeProcessProject, setActiveProcessProject] = useState(0);
     const [slider1, setSlider1] = useState(33);
     const [slider2, setSlider2] = useState(66);
+
+    // SHOWROOM STATE
+    const [activeShowroom, setActiveShowroom] = useState(0);
 
     const [showUpdateBanner, setShowUpdateBanner] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -210,7 +210,7 @@ export default function SkylineClientPage() {
                     </a>
                 </div>
 
-                {/* DESKTOP NAV */}
+                {/* DESKTOP NAV (No Showroom Tab here) */}
                 <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-[10px] uppercase tracking-[0.3em] font-medium text-white/90 pointer-events-auto">
                     {NAV_LINKS.map((link) => (
                         <a
@@ -308,72 +308,6 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            <section id="showroom" className="py-16 md:py-32 px-5 md:px-12 bg-white relative border-b border-neutral-200">
-                <div className="max-w-[1400px] mx-auto">
-
-                    <div className="flex flex-col items-center text-center mb-8 md:mb-12">
-                        <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-amber-600 tracking-tight uppercase">
-                            Interactive Showroom
-                        </h2>
-                    </div>
-
-                    <div className="flex justify-center items-center gap-4 md:gap-8 border-b border-neutral-200 mb-10 md:mb-16 overflow-x-auto no-scrollbar snap-x w-full px-4 relative">
-                        {SHOWROOM_MODELS.map((model, idx) => (
-                            <button
-                                key={model.id}
-                                onClick={(e) => {
-                                    setActiveModelIndex(idx);
-                                    e.currentTarget.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-                                }}
-                                className={cn(
-                                    "px-2 md:px-6 py-4 text-[10px] md:text-sm font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] transition-all duration-300 relative font-sans whitespace-nowrap snap-center",
-                                    activeModelIndex === idx ? "text-amber-600" : "text-neutral-400 hover:text-neutral-600"
-                                )}
-                            >
-                                {model.tabLabel}
-                                {activeModelIndex === idx && (
-                                    <motion.div layoutId="activeTabIndicator" className="absolute bottom-0 left-0 right-0 h-[3px] bg-amber-600" initial={false} transition={{ type: "spring", stiffness: 300, damping: 30 }} />
-                                )}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
-                        <div className="lg:col-span-8 relative group bg-neutral-100 rounded-sm overflow-hidden border border-neutral-200 shadow-xl">
-                            <div className="relative w-full aspect-square md:aspect-video bg-neutral-950">
-                                <iframe key={SHOWROOM_MODELS[activeModelIndex].id} title={SHOWROOM_MODELS[activeModelIndex].title} className="absolute top-0 left-0 w-full h-full" src={SHOWROOM_MODELS[activeModelIndex].embedUrl} allow="autoplay; fullscreen; xr-spatial-tracking" allowFullScreen />
-                                <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white px-3 md:px-4 py-1.5 md:py-2 rounded-sm text-[8px] md:text-[9px] uppercase tracking-widest font-bold pointer-events-none group-hover:opacity-0 transition-opacity duration-500 flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-amber-500 animate-pulse" />
-                                    Interact to Rotate
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="lg:col-span-4 flex flex-col justify-center py-2 md:py-6">
-                            <AnimatePresence mode="wait">
-                                <motion.div key={SHOWROOM_MODELS[activeModelIndex].id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.5, ease: "easeOut" }} className="space-y-6 md:space-y-8">
-                                    <div>
-                                        <h3 className="font-serif text-2xl md:text-4xl text-neutral-900 mb-3 md:mb-4">{SHOWROOM_MODELS[activeModelIndex].title}</h3>
-                                        <p className="text-neutral-500 font-light leading-relaxed text-xs md:text-base">{SHOWROOM_MODELS[activeModelIndex].description}</p>
-                                    </div>
-                                    <div className="space-y-3 md:space-y-4 pt-4 md:pt-6 border-t border-neutral-200">
-                                        {SHOWROOM_MODELS[activeModelIndex].specs.map((spec, idx) => (
-                                            <div key={idx} className="flex items-center justify-between p-3 md:p-4 bg-[#F9F9F7] border border-neutral-200 rounded-sm hover:border-amber-900/30 transition-colors group">
-                                                <div className="flex items-center gap-2 md:gap-3 text-neutral-500">
-                                                    <span className="text-amber-800/70 group-hover:text-amber-800 transition-colors scale-90 md:scale-100">{spec.icon}</span>
-                                                    <span className="text-[8px] md:text-[10px] uppercase tracking-[0.2em] font-bold">{spec.label}</span>
-                                                </div>
-                                                <span className="font-serif text-xs md:text-sm text-neutral-900 font-medium">{spec.value}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <section id="process" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-950 text-white relative">
                 <div className="max-w-[1400px] mx-auto">
 
@@ -381,41 +315,22 @@ export default function SkylineClientPage() {
                         <span className="text-amber-500 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
                             Execution Matrix
                         </span>
-                        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight mb-8">
+                        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight mb-6">
                             Vision to Reality.
                         </h2>
 
-                        {/* SINGLE TAB DISPLAY WITH PREV/NEXT CYCLING */}
-                        <div className="flex items-center justify-center gap-4 w-full max-w-sm mx-auto">
-                            <button
-                                onClick={prevProcessProject}
-                                className="p-2 text-neutral-600 hover:text-amber-500 transition-colors bg-neutral-900 hover:bg-neutral-800 rounded-sm border border-neutral-800"
-                                aria-label="Previous Category"
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={activeProcessProject}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                                className="px-5 py-3 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border border-amber-500 bg-amber-500/10 text-amber-400 rounded-sm font-sans text-center whitespace-nowrap shadow-[0_0_15px_rgba(245,158,11,0.1)]"
                             >
-                                <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
-                            </button>
-
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={activeProcessProject}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="flex-1 px-4 py-3 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border border-amber-500 bg-amber-500/10 text-amber-400 rounded-sm font-sans text-center whitespace-nowrap overflow-hidden text-ellipsis shadow-[0_0_15px_rgba(245,158,11,0.1)]"
-                                >
-                                    {PROCESS_PROJECTS[activeProcessProject].category}
-                                </motion.div>
-                            </AnimatePresence>
-
-                            <button
-                                onClick={nextProcessProject}
-                                className="p-2 text-neutral-600 hover:text-amber-500 transition-colors bg-neutral-900 hover:bg-neutral-800 rounded-sm border border-neutral-800"
-                                aria-label="Next Category"
-                            >
-                                <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-                            </button>
-                        </div>
+                                {PROCESS_PROJECTS[activeProcessProject].category}
+                            </motion.div>
+                        </AnimatePresence>
                     </div>
 
                     {/* TRIPLE IMAGE SLIDER CONTAINER */}
@@ -467,6 +382,7 @@ export default function SkylineClientPage() {
                             </div>
                         </div>
 
+                        {/* SLIDER 1 (WHITE) - Pointer-Events trick to prevent overlapping blocking */}
                         <input
                             type="range"
                             min="0"
@@ -474,13 +390,14 @@ export default function SkylineClientPage() {
                             value={slider1}
                             onChange={(e) => {
                                 const val = Number(e.target.value);
-                                setSlider1(val);
-                                if (val > slider2) setSlider2(val);
+                                if (val > slider2) setSlider1(slider2);
+                                else setSlider1(val);
                             }}
-                            className="absolute top-0 inset-x-0 h-1/2 z-50 opacity-0 cursor-ew-resize w-full appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-24 [&::-webkit-slider-thumb]:h-[500px]"
+                            className="absolute inset-0 z-50 opacity-0 cursor-ew-resize w-full h-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-16 [&::-webkit-slider-thumb]:h-full [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-16 [&::-moz-range-thumb]:h-full"
                             aria-label="Phase 1 Slider"
                         />
 
+                        {/* SLIDER 2 (AMBER) - Pointer-Events trick to prevent overlapping blocking */}
                         <input
                             type="range"
                             min="0"
@@ -488,16 +405,24 @@ export default function SkylineClientPage() {
                             value={slider2}
                             onChange={(e) => {
                                 const val = Number(e.target.value);
-                                setSlider2(val);
-                                if (val < slider1) setSlider1(val);
+                                if (val < slider1) setSlider2(slider1);
+                                else setSlider2(val);
                             }}
-                            className="absolute bottom-0 inset-x-0 h-1/2 z-50 opacity-0 cursor-ew-resize w-full appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-24 [&::-webkit-slider-thumb]:h-[500px]"
+                            className="absolute inset-0 z-50 opacity-0 cursor-ew-resize w-full h-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-16 [&::-webkit-slider-thumb]:h-full [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-16 [&::-moz-range-thumb]:h-full"
                             aria-label="Phase 2 Slider"
                         />
                     </div>
 
-                    {/* DOT NAVIGATION FOR PROJECTS (Kept as supplementary visual indicator) */}
-                    <div className="flex justify-center items-center mt-6 w-full max-w-sm mx-auto px-4 sm:px-0">
+                    {/* BOTTOM CONTROLS (Dots + Prev/Next Buttons) */}
+                    <div className="flex justify-between items-center mt-6 md:mt-8 w-full max-w-md mx-auto px-4 sm:px-0">
+                        <button
+                            onClick={prevProcessProject}
+                            className="px-4 py-2 text-neutral-500 hover:text-amber-500 transition-colors bg-neutral-900 hover:bg-neutral-800 rounded-sm border border-neutral-800 text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
+                            aria-label="Previous Category"
+                        >
+                            PREV
+                        </button>
+
                         <div className="flex gap-3">
                             {PROCESS_PROJECTS.map((_, idx) => (
                                 <button
@@ -508,8 +433,94 @@ export default function SkylineClientPage() {
                                 />
                             ))}
                         </div>
+
+                        <button
+                            onClick={nextProcessProject}
+                            className="px-4 py-2 text-neutral-500 hover:text-amber-500 transition-colors bg-neutral-900 hover:bg-neutral-800 rounded-sm border border-neutral-800 text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
+                            aria-label="Next Category"
+                        >
+                            NEXT
+                        </button>
                     </div>
 
+                </div>
+            </section>
+
+            {/* RESTORED SHOWROOM SECTION */}
+            <section id="showroom" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-900 text-white relative border-t border-neutral-800">
+                <div className="max-w-[1400px] mx-auto">
+                    <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-16 gap-6">
+                        <div>
+                            <span className="text-amber-500 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
+                                Interactive Showroom
+                            </span>
+                            <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight">
+                                Structural Typologies.
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 h-auto lg:h-[600px]">
+                        {/* Selected Large Image */}
+                        <div className="relative w-full lg:w-2/3 h-[400px] lg:h-full bg-black rounded-sm overflow-hidden group">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={activeShowroom}
+                                    initial={{ opacity: 0, scale: 1.05 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="absolute inset-0"
+                                >
+                                    <Image
+                                        src={SHOWROOM_ITEMS[activeShowroom].url}
+                                        alt={SHOWROOM_ITEMS[activeShowroom].title}
+                                        fill
+                                        className="object-cover object-center opacity-90"
+                                        sizes="(max-width: 1024px) 100vw, 66vw"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+                                    <div className="absolute bottom-8 left-8 right-8 z-10">
+                                        <h3 className="font-serif text-3xl md:text-4xl text-white mb-2">
+                                            {SHOWROOM_ITEMS[activeShowroom].title}
+                                        </h3>
+                                        <p className="text-neutral-300 font-sans text-sm max-w-lg">
+                                            {SHOWROOM_ITEMS[activeShowroom].description}
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Thumbnail Selector list */}
+                        <div className="w-full lg:w-1/3 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
+                            {SHOWROOM_ITEMS.map((item, idx) => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => setActiveShowroom(idx)}
+                                    className={cn(
+                                        "relative w-full text-left p-4 md:p-6 transition-all duration-300 rounded-sm border",
+                                        activeShowroom === idx
+                                            ? "bg-neutral-800 border-amber-500/50 shadow-lg"
+                                            : "bg-neutral-950 border-neutral-800 hover:border-neutral-600 hover:bg-neutral-900"
+                                    )}
+                                >
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h4 className={cn("font-serif text-xl transition-colors", activeShowroom === idx ? "text-amber-500" : "text-white")}>
+                                            {item.title}
+                                        </h4>
+                                        {activeShowroom === idx && (
+                                            <ArrowRight className="w-5 h-5 text-amber-500" />
+                                        )}
+                                    </div>
+                                    <p className="text-neutral-400 text-xs font-sans line-clamp-2">
+                                        {item.description}
+                                    </p>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </section>
 
