@@ -68,6 +68,15 @@ const SERVICES = [
     { title: "3D Visualization", icon: <Box className="w-6 h-6 stroke-[1.2]" />, description: "Photorealistic spatial rendering and real-time structural interaction, allowing exact verification prior to execution." }
 ];
 
+const NAV_LINKS = [
+    { label: "Home", href: "#hero" },
+    { label: "Showroom", href: "#showroom" },
+    { label: "Process", href: "#process" },
+    { label: "Services", href: "#services" },
+    { label: "Team", href: "#team" },
+    { label: "Connect", href: "#contact" }
+];
+
 // --- SUB-COMPONENTS ---
 const MessageBubbleIcon = ({ className }: { className?: string }) => (
     <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -191,21 +200,30 @@ export default function SkylineClientPage() {
                 )}
             </AnimatePresence>
 
+            {/* HEADER NAVIGATION */}
             <header className="fixed top-0 left-0 w-full z-50 bg-neutral-950/80 backdrop-blur-xl border-b border-white/10 py-4 px-5 md:px-12 flex justify-between items-center transition-all duration-300">
                 <div className="flex items-center gap-4 pointer-events-auto">
-                    <Link href="/">
+                    <a href="#hero">
                         <div className="relative w-28 h-8 md:w-48 md:h-12 hover:opacity-80 transition-opacity">
                             <Image src={LOGO_URL} alt="SkylineDB3" fill className="object-contain object-left opacity-95" priority sizes="(max-width: 768px) 120px, 200px" />
                         </div>
-                    </Link>
+                    </a>
                 </div>
 
-                <nav className="hidden md:flex items-center gap-10 text-[10px] uppercase tracking-[0.3em] font-medium text-white/90 pointer-events-auto">
-                    <Link href="/" className="text-amber-400 hover:text-white transition-colors font-bold">Home</Link>
-                    <Link href="/projects" className="hover:text-amber-400 transition-colors">Projects</Link>
-                    <a href="#services" className="hover:text-amber-400 transition-colors">Services</a>
-                    <Link href="/about" className="hover:text-amber-400 transition-colors">About</Link>
-                    <a href="#contact" className="hover:text-amber-400 transition-colors">Connect</a>
+                {/* DESKTOP NAV */}
+                <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-[10px] uppercase tracking-[0.3em] font-medium text-white/90 pointer-events-auto">
+                    {NAV_LINKS.map((link) => (
+                        <a
+                            key={link.label}
+                            href={link.href}
+                            className={cn(
+                                "transition-colors",
+                                link.label === "Home" ? "text-amber-400 font-bold hover:text-white" : "hover:text-amber-400"
+                            )}
+                        >
+                            {link.label}
+                        </a>
+                    ))}
                 </nav>
 
                 <button className="md:hidden pointer-events-auto text-white p-2" onClick={() => setIsMobileMenuOpen(true)} aria-label="Open Menu">
@@ -213,6 +231,7 @@ export default function SkylineClientPage() {
                 </button>
             </header>
 
+            {/* MOBILE NAV OVERLAY */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
@@ -225,11 +244,19 @@ export default function SkylineClientPage() {
                             <X className="w-8 h-8" strokeWidth={1.5} />
                         </button>
                         <nav className="flex flex-col gap-8 text-2xl font-serif text-white/80 tracking-wide">
-                            <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-amber-500 font-bold transition-colors">Home</Link>
-                            <Link href="/projects" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Projects</Link>
-                            <a href="#services" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Services</a>
-                            <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">About</Link>
-                            <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors mt-4">Connect</a>
+                            {NAV_LINKS.map((link) => (
+                                <a
+                                    key={link.label}
+                                    href={link.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className={cn(
+                                        "transition-colors",
+                                        link.label === "Home" ? "text-amber-500 font-bold" : "hover:text-amber-500"
+                                    )}
+                                >
+                                    {link.label}
+                                </a>
+                            ))}
                         </nav>
                     </motion.div>
                 )}
@@ -358,24 +385,41 @@ export default function SkylineClientPage() {
                             Vision to Reality.
                         </h2>
 
-                        <div className="flex flex-wrap justify-center gap-2 md:gap-4 w-full">
-                            {PROCESS_PROJECTS.map((project, idx) => (
-                                <button
-                                    key={project.id}
-                                    onClick={() => { setActiveProcessProject(idx); setSlider1(33); setSlider2(66); }}
-                                    className={cn(
-                                        "px-4 py-2.5 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border transition-all duration-300 rounded-sm font-sans flex-grow sm:flex-grow-0",
-                                        activeProcessProject === idx ? "border-amber-500 bg-amber-500/10 text-amber-400" : "border-neutral-800 text-neutral-500 hover:border-neutral-600 hover:text-neutral-300"
-                                    )}
+                        {/* SINGLE TAB DISPLAY WITH PREV/NEXT CYCLING */}
+                        <div className="flex items-center justify-center gap-4 w-full max-w-sm mx-auto">
+                            <button
+                                onClick={prevProcessProject}
+                                className="p-2 text-neutral-600 hover:text-amber-500 transition-colors bg-neutral-900 hover:bg-neutral-800 rounded-sm border border-neutral-800"
+                                aria-label="Previous Category"
+                            >
+                                <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+                            </button>
+
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={activeProcessProject}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="flex-1 px-4 py-3 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border border-amber-500 bg-amber-500/10 text-amber-400 rounded-sm font-sans text-center whitespace-nowrap overflow-hidden text-ellipsis shadow-[0_0_15px_rgba(245,158,11,0.1)]"
                                 >
-                                    {project.category}
-                                </button>
-                            ))}
+                                    {PROCESS_PROJECTS[activeProcessProject].category}
+                                </motion.div>
+                            </AnimatePresence>
+
+                            <button
+                                onClick={nextProcessProject}
+                                className="p-2 text-neutral-600 hover:text-amber-500 transition-colors bg-neutral-900 hover:bg-neutral-800 rounded-sm border border-neutral-800"
+                                aria-label="Next Category"
+                            >
+                                <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+                            </button>
                         </div>
                     </div>
 
                     {/* TRIPLE IMAGE SLIDER CONTAINER */}
-                    <div className="relative w-full aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl">
+                    <div className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl">
                         <AnimatePresence mode="wait">
                             <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0">
 
@@ -423,36 +467,47 @@ export default function SkylineClientPage() {
                             </div>
                         </div>
 
-                        {/* INVISIBLE RANGE INPUTS: Pushing logic implemented to drag both when merged */}
-                        {/* Note: 'touch-none' prevents horizontal swiping from scrolling the whole page or triggering 'back' navigation on mobile */}
-                        <input type="range" min="0" max="100" value={slider1} onChange={(e) => {
-                            const val = Number(e.target.value);
-                            setSlider1(val);
-                            if (val > slider2) setSlider2(val);
-                        }} className="absolute top-0 inset-x-0 h-1/2 z-50 opacity-0 cursor-ew-resize w-full touch-none" aria-label="Phase 1 Slider" />
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={slider1}
+                            onChange={(e) => {
+                                const val = Number(e.target.value);
+                                setSlider1(val);
+                                if (val > slider2) setSlider2(val);
+                            }}
+                            className="absolute top-0 inset-x-0 h-1/2 z-50 opacity-0 cursor-ew-resize w-full appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-24 [&::-webkit-slider-thumb]:h-[500px]"
+                            aria-label="Phase 1 Slider"
+                        />
 
-                        <input type="range" min="0" max="100" value={slider2} onChange={(e) => {
-                            const val = Number(e.target.value);
-                            setSlider2(val);
-                            if (val < slider1) setSlider1(val);
-                        }} className="absolute bottom-0 inset-x-0 h-1/2 z-50 opacity-0 cursor-ew-resize w-full touch-none" aria-label="Phase 2 Slider" />
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={slider2}
+                            onChange={(e) => {
+                                const val = Number(e.target.value);
+                                setSlider2(val);
+                                if (val < slider1) setSlider1(val);
+                            }}
+                            className="absolute bottom-0 inset-x-0 h-1/2 z-50 opacity-0 cursor-ew-resize w-full appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-24 [&::-webkit-slider-thumb]:h-[500px]"
+                            aria-label="Phase 2 Slider"
+                        />
                     </div>
 
-                    {/* DOT NAVIGATION FOR PROJECTS */}
-                    <div className="flex justify-between items-center mt-6 w-full max-w-sm mx-auto px-4 sm:px-0">
-                        <button onClick={prevProcessProject} className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors group py-2" aria-label="Previous Project">
-                            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                            <span className="text-[10px] uppercase tracking-widest font-bold">Prev</span>
-                        </button>
-                        <div className="flex gap-2">
+                    {/* DOT NAVIGATION FOR PROJECTS (Kept as supplementary visual indicator) */}
+                    <div className="flex justify-center items-center mt-6 w-full max-w-sm mx-auto px-4 sm:px-0">
+                        <div className="flex gap-3">
                             {PROCESS_PROJECTS.map((_, idx) => (
-                                <div key={idx} className={cn("h-1 rounded-full transition-all duration-300", activeProcessProject === idx ? "w-6 bg-amber-500" : "w-1.5 bg-neutral-700")} />
+                                <button
+                                    key={idx}
+                                    onClick={() => { setActiveProcessProject(idx); setSlider1(33); setSlider2(66); }}
+                                    className={cn("h-1.5 rounded-full transition-all duration-300", activeProcessProject === idx ? "w-8 bg-amber-500" : "w-2 bg-neutral-700 hover:bg-neutral-500")}
+                                    aria-label={`Go to project ${idx + 1}`}
+                                />
                             ))}
                         </div>
-                        <button onClick={nextProcessProject} className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors group py-2" aria-label="Next Project">
-                            <span className="text-[10px] uppercase tracking-widest font-bold">Next</span>
-                            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                        </button>
                     </div>
 
                 </div>
@@ -487,7 +542,7 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            <section id="studio" className="py-16 md:py-40 px-5 md:px-12 bg-white border-t border-neutral-200 relative">
+            <section id="team" className="py-16 md:py-40 px-5 md:px-12 bg-white border-t border-neutral-200 relative">
                 <div className="max-w-[1400px] mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                         <div className="relative w-full aspect-[4/3] md:aspect-square bg-neutral-100 overflow-hidden rounded-sm">
@@ -496,7 +551,7 @@ export default function SkylineClientPage() {
 
                         <div className="text-left">
                             <span className="text-amber-800 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
-                                The Studio
+                                The Team
                             </span>
                             <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tight mb-6 md:mb-8">
                                 Uncompromising <br />Spatial Engineering.
@@ -504,9 +559,9 @@ export default function SkylineClientPage() {
                             <p className="text-neutral-500 font-light text-sm md:text-lg leading-relaxed font-sans mb-8 md:mb-12">
                                 SkylineDB3 is a highly calibrated collective of spatial engineers, masterplanners, and structural visionaries operating on a global scale. We master the intersection of structural physics and aesthetic form to deliver landmark environments that meet strict developmental and fiscal thresholds.
                             </p>
-                            <Link href="/about" className="inline-flex items-center justify-center border border-neutral-200 text-neutral-800 px-8 py-4 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] hover:border-amber-900 hover:text-amber-900 transition-colors font-sans rounded-sm group">
-                                Discover the Firm <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />
-                            </Link>
+                            <a href="#contact" className="inline-flex items-center justify-center border border-neutral-200 text-neutral-800 px-8 py-4 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] hover:border-amber-900 hover:text-amber-900 transition-colors font-sans rounded-sm group">
+                                Connect With Us <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />
+                            </a>
                         </div>
                     </div>
                 </div>
