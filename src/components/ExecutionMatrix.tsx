@@ -124,9 +124,19 @@ export default function ExecutionMatrix() {
                     ref={sliderContainerRef}
                     className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl select-none"
                 >
+                    {/* STATIC LINE & LABEL 1: CONCEPT (Pinned to Left Edge) */}
+                    <div className="absolute top-0 bottom-0 left-0 w-[1px] bg-white/30 z-[55] pointer-events-none">
+                        {/* Box styling updated to solid Amber/Yellow with dark text for high visibility */}
+                        <div className="absolute top-[15%] left-0 ml-1 -translate-y-1/2 bg-amber-500 px-2 py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600/50">
+                            <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap font-mono select-none">
+                                Concept
+                            </span>
+                        </div>
+                    </div>
+
                     <AnimatePresence mode="wait">
                         <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0 pointer-events-none">
-                            {/* Base Image (Rightmost) */}
+                            {/* Base Image (Rightmost - Phase 4) */}
                             <Image priority src={PROCESS_PROJECTS[activeProcessProject].img4.url} alt={PROCESS_PROJECTS[activeProcessProject].img4.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, 1400px" />
 
                             {/* Image 3 clipped by slider 3 */}
@@ -153,7 +163,7 @@ export default function ExecutionMatrix() {
                         </motion.div>
                     </AnimatePresence>
 
-                    {/* SLIDER 1 HANDLE (Phase 01) */}
+                    {/* SLIDER 1 HANDLE (Layout) */}
                     <div
                         className="absolute top-0 bottom-0 w-8 -ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider1}%` }}
@@ -162,16 +172,17 @@ export default function ExecutionMatrix() {
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        <div className="w-[1px] h-full bg-white/30 relative transition-colors duration-300 group-hover:bg-white/60">
-                            <div className="absolute top-[20%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-neutral-900/80 backdrop-blur-md border border-white/10 px-2 py-5 rounded-sm shadow-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:border-white/30">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.3em] font-bold text-white whitespace-nowrap pointer-events-none font-mono select-none">
-                                    Phase 01
+                        <div className="w-[1px] h-full bg-white/30 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
+                            {/* Solid high-visibility Box */}
+                            <div className="absolute top-[40%] left-full ml-1 -translate-y-1/2 bg-amber-500 px-2 py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap pointer-events-none font-mono select-none">
+                                    Layout
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    {/* SLIDER 2 HANDLE (Phase 02 - Amber) */}
+                    {/* SLIDER 2 HANDLE (Model - Amber Highlight Line) */}
                     <div
                         className="absolute top-0 bottom-0 w-8 -ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider2}%` }}
@@ -180,16 +191,18 @@ export default function ExecutionMatrix() {
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        <div className="w-[1px] h-full bg-amber-500/50 relative transition-colors duration-300 group-hover:bg-amber-500">
-                            <div className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-neutral-900/80 backdrop-blur-md border border-amber-500 px-2 py-5 rounded-sm shadow-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:bg-neutral-900">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.3em] font-bold text-amber-500 whitespace-nowrap pointer-events-none font-mono select-none">
-                                    Phase 02
+                        {/* Model line already amber-highlighted */}
+                        <div className="w-[1px] h-full bg-amber-500/50 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
+                            {/* Solid high-visibility Box (consistent with others) */}
+                            <div className="absolute top-[65%] left-full ml-1 -translate-y-1/2 bg-amber-500 px-2 py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap pointer-events-none font-mono select-none">
+                                    Model
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    {/* SLIDER 3 HANDLE (Phase 03) */}
+                    {/* SLIDER 3 HANDLE (Realism) */}
                     <div
                         className="absolute top-0 bottom-0 w-8 -ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider3}%` }}
@@ -198,10 +211,11 @@ export default function ExecutionMatrix() {
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        <div className="w-[1px] h-full bg-white/30 relative transition-colors duration-300 group-hover:bg-white/60">
-                            <div className="absolute top-[80%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-neutral-900/80 backdrop-blur-md border border-white/10 px-2 py-5 rounded-sm shadow-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:border-white/30">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.3em] font-bold text-white whitespace-nowrap pointer-events-none font-mono select-none">
-                                    Phase 03
+                        <div className="w-[1px] h-full bg-white/30 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
+                            {/* Solid high-visibility Box */}
+                            <div className="absolute top-[90%] left-full ml-1 -translate-y-1/2 bg-amber-500 px-2 py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap pointer-events-none font-mono select-none">
+                                    Realism
                                 </span>
                             </div>
                         </div>
