@@ -7,6 +7,9 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 
+// IMPORT YOUR NEW SHOWROOM COMPONENT HERE
+import InteractiveShowroom from './InteractiveShowroom';
+
 // --- UTILITIES ---
 function cn(...classes: (string | undefined | null | false)[]) {
     return classes.filter(Boolean).join(' ');
@@ -53,12 +56,6 @@ const PROCESS_PROJECTS = [
     }
 ];
 
-const SHOWROOM_ITEMS = [
-    { id: 'ext', title: "Exterior Facade", description: "Thermally broken structural glazing with automated environmental shading.", url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop" },
-    { id: 'int', title: "Lobby Atrium", description: "Triple-height structural volumes engineered to optimize pedestrian flow and acoustic damping.", url: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2500&auto=format&fit=crop" },
-    { id: 'ame', title: "Sky Terrace", description: "Cantilevered observation zones maximizing structural load efficiency and tenant ROI.", url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2500&auto=format&fit=crop" }
-];
-
 const SERVICES = [
     { title: "Land Planning", icon: <MapPin className="w-6 h-6 stroke-[1.2]" />, description: "Strategic terrain evaluation and zoning optimization designed to guarantee maximum parcel yield and regulatory compliance." },
     { title: "Masterplanning", icon: <Building2 className="w-6 h-6 stroke-[1.2]" />, description: "Comprehensive urban and sector frameworks seamlessly integrating infrastructure, commerce, and public transit corridors." },
@@ -68,6 +65,7 @@ const SERVICES = [
 
 const NAV_LINKS = [
     { label: "Home", href: "#hero" },
+    { label: "Showroom", href: "#showroom" }, // Added showroom back to nav contextually
     { label: "Process", href: "#process" },
     { label: "Services", href: "#services" },
     { label: "Team", href: "#team" },
@@ -124,9 +122,6 @@ export default function SkylineClientPage() {
     const sliderContainerRef = useRef<HTMLDivElement>(null);
     const [draggingSlider, setDraggingSlider] = useState<1 | 2 | null>(null);
 
-    // SHOWROOM STATE
-    const [activeShowroom, setActiveShowroom] = useState(0);
-
     const [showUpdateBanner, setShowUpdateBanner] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -179,16 +174,10 @@ export default function SkylineClientPage() {
 
         if (draggingSlider === 1) {
             setSlider1(newPercent);
-            // If dragging slider 1 past slider 2, push slider 2 along with it
-            if (newPercent > slider2) {
-                setSlider2(newPercent);
-            }
+            if (newPercent > slider2) setSlider2(newPercent);
         } else if (draggingSlider === 2) {
             setSlider2(newPercent);
-            // If dragging slider 2 past slider 1, push slider 1 along with it
-            if (newPercent < slider1) {
-                setSlider1(newPercent);
-            }
+            if (newPercent < slider1) setSlider1(newPercent);
         }
     };
 
@@ -296,6 +285,7 @@ export default function SkylineClientPage() {
                 )}
             </AnimatePresence>
 
+            {/* HERO SECTION */}
             <section id="hero" className="relative w-full h-[100svh] overflow-hidden bg-black pt-20">
                 <AnimatePresence mode="popLayout">
                     <motion.div key={currentSlide} initial={{ opacity: 0, scale: 1.05 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }} className="absolute inset-0 z-0">
@@ -342,9 +332,18 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
+            {/* ========================================= */}
+            {/* INTERACTIVE SHOWROOM COMPONENT PLACED HERE */}
+            {/* ========================================= */}
+
+            <InteractiveShowroom />
+
+            {/* ========================================= */}
+            {/* ========================================= */}
+
+            {/* PROCESS SECTION */}
             <section id="process" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-950 text-white relative">
                 <div className="max-w-[1400px] mx-auto">
-
                     <div className="flex flex-col items-center text-center mb-8 md:mb-12">
                         <span className="text-amber-500 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
                             Execution Matrix
@@ -352,7 +351,6 @@ export default function SkylineClientPage() {
                         <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight mb-6">
                             Vision to Reality.
                         </h2>
-
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={activeProcessProject}
@@ -367,30 +365,20 @@ export default function SkylineClientPage() {
                         </AnimatePresence>
                     </div>
 
-                    {/* TRIPLE IMAGE SLIDER CONTAINER */}
                     <div
                         ref={sliderContainerRef}
                         className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl select-none"
                     >
                         <AnimatePresence mode="wait">
                             <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0 pointer-events-none">
-
-                                {/* LAYER 3 (BASE): FINAL RENDER */}
                                 <Image priority src={PROCESS_PROJECTS[activeProcessProject].img3.url} alt={PROCESS_PROJECTS[activeProcessProject].img3.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
-
-                                {/* LAYER 2 (MIDDLE): 3D MODEL */}
                                 <div className="absolute inset-0 z-10" style={{ clipPath: `inset(0 ${100 - slider2}% 0 0)` }}>
                                     <Image priority src={PROCESS_PROJECTS[activeProcessProject].img2.url} alt={PROCESS_PROJECTS[activeProcessProject].img2.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
                                 </div>
-
-                                {/* LAYER 1 (TOP): SKETCH */}
                                 <div className="absolute inset-0 z-20" style={{ clipPath: `inset(0 ${100 - slider1}% 0 0)` }}>
                                     <Image priority src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
                                 </div>
-
                                 <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/90 to-transparent z-10" />
-
-                                {/* SINGLE PROJECT TITLE (Centered) */}
                                 <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-30 px-4">
                                     <h3 className="font-serif text-2xl md:text-4xl text-white drop-shadow-lg">
                                         {PROCESS_PROJECTS[activeProcessProject].title}
@@ -399,7 +387,6 @@ export default function SkylineClientPage() {
                             </motion.div>
                         </AnimatePresence>
 
-                        {/* HANDLE 1 (Phase 1 ➔ Phase 2) */}
                         <div
                             className="absolute top-0 bottom-0 w-8 -ml-4 z-40 touch-none flex justify-center cursor-ew-resize group"
                             style={{ left: `${slider1}%` }}
@@ -408,9 +395,7 @@ export default function SkylineClientPage() {
                             onPointerUp={handlePointerUp}
                             onPointerCancel={handlePointerUp}
                         >
-                            {/* The vertical line */}
                             <div className="w-[2px] h-full bg-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] relative">
-                                {/* The circular grabber */}
                                 <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-xl border-2 border-black/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                                     <div className="flex items-center -space-x-1.5 md:-space-x-2 text-neutral-900">
                                         <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
@@ -420,7 +405,6 @@ export default function SkylineClientPage() {
                             </div>
                         </div>
 
-                        {/* HANDLE 2 (Phase 2 ➔ Phase 3) */}
                         <div
                             className="absolute top-0 bottom-0 w-8 -ml-4 z-40 touch-none flex justify-center cursor-ew-resize group"
                             style={{ left: `${slider2}%` }}
@@ -429,9 +413,7 @@ export default function SkylineClientPage() {
                             onPointerUp={handlePointerUp}
                             onPointerCancel={handlePointerUp}
                         >
-                            {/* The vertical line */}
                             <div className="w-[2px] h-full bg-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.8)] relative">
-                                {/* The circular grabber */}
                                 <div className="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full shadow-xl border-2 border-white flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                                     <div className="flex items-center -space-x-1.5 md:-space-x-2 text-white">
                                         <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
@@ -442,7 +424,6 @@ export default function SkylineClientPage() {
                         </div>
                     </div>
 
-                    {/* BOTTOM CONTROLS (Dots + Prev/Next Buttons) */}
                     <div className="flex justify-between items-center mt-6 md:mt-8 w-full max-w-md mx-auto px-4 sm:px-0">
                         <button
                             onClick={prevProcessProject}
@@ -471,87 +452,11 @@ export default function SkylineClientPage() {
                             NEXT
                         </button>
                     </div>
-
                 </div>
             </section>
 
-            <section id="showroom" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-900 text-white relative border-t border-neutral-800">
-                <div className="max-w-[1400px] mx-auto">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-16 gap-6">
-                        <div>
-                            <span className="text-amber-500 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
-                                Interactive Showroom
-                            </span>
-                            <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight">
-                                Structural Typologies.
-                            </h2>
-                        </div>
-                    </div>
 
-                    <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 h-auto lg:h-[600px]">
-                        {/* Selected Large Image */}
-                        <div className="relative w-full lg:w-2/3 h-[400px] lg:h-full bg-black rounded-sm overflow-hidden group">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={activeShowroom}
-                                    initial={{ opacity: 0, scale: 1.05 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="absolute inset-0"
-                                >
-                                    <Image
-                                        src={SHOWROOM_ITEMS[activeShowroom].url}
-                                        alt={SHOWROOM_ITEMS[activeShowroom].title}
-                                        fill
-                                        className="object-cover object-center opacity-90"
-                                        sizes="(max-width: 1024px) 100vw, 66vw"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
-
-                                    <div className="absolute bottom-8 left-8 right-8 z-10">
-                                        <h3 className="font-serif text-3xl md:text-4xl text-white mb-2">
-                                            {SHOWROOM_ITEMS[activeShowroom].title}
-                                        </h3>
-                                        <p className="text-neutral-300 font-sans text-sm max-w-lg">
-                                            {SHOWROOM_ITEMS[activeShowroom].description}
-                                        </p>
-                                    </div>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-
-                        {/* Thumbnail Selector list */}
-                        <div className="w-full lg:w-1/3 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
-                            {SHOWROOM_ITEMS.map((item, idx) => (
-                                <button
-                                    key={item.id}
-                                    onClick={() => setActiveShowroom(idx)}
-                                    className={cn(
-                                        "relative w-full text-left p-4 md:p-6 transition-all duration-300 rounded-sm border",
-                                        activeShowroom === idx
-                                            ? "bg-neutral-800 border-amber-500/50 shadow-lg"
-                                            : "bg-neutral-950 border-neutral-800 hover:border-neutral-600 hover:bg-neutral-900"
-                                    )}
-                                >
-                                    <div className="flex items-center justify-between mb-2">
-                                        <h4 className={cn("font-serif text-xl transition-colors", activeShowroom === idx ? "text-amber-500" : "text-white")}>
-                                            {item.title}
-                                        </h4>
-                                        {activeShowroom === idx && (
-                                            <ArrowRight className="w-5 h-5 text-amber-500" />
-                                        )}
-                                    </div>
-                                    <p className="text-neutral-400 text-xs font-sans line-clamp-2">
-                                        {item.description}
-                                    </p>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </section>
-
+            {/* SERVICES SECTION */}
             <section id="services" className="py-16 md:py-40 px-5 md:px-12 bg-[#F4F4F2] border-t border-neutral-200">
                 <div className="max-w-[1400px] mx-auto">
                     <div className="text-left md:text-center mb-10 md:mb-24">
@@ -581,6 +486,7 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
+            {/* TEAM SECTION */}
             <section id="team" className="py-16 md:py-40 px-5 md:px-12 bg-white border-t border-neutral-200 relative">
                 <div className="max-w-[1400px] mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
@@ -606,6 +512,7 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
+            {/* FOOTER CONTACT */}
             <footer id="contact" className="py-20 md:py-40 px-5 md:px-6 bg-[#F4F4F2] border-t border-neutral-200 relative z-10 text-center">
                 <div className="max-w-2xl mx-auto">
                     <div className="w-[1px] h-12 md:h-16 bg-amber-900/30 mx-auto mb-8 md:mb-12" />
