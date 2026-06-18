@@ -178,9 +178,17 @@ export default function SkylineClientPage() {
         newPercent = Math.max(0, Math.min(100, newPercent));
 
         if (draggingSlider === 1) {
-            setSlider1(Math.min(newPercent, slider2));
+            setSlider1(newPercent);
+            // If dragging slider 1 past slider 2, push slider 2 along with it
+            if (newPercent > slider2) {
+                setSlider2(newPercent);
+            }
         } else if (draggingSlider === 2) {
-            setSlider2(Math.max(newPercent, slider1));
+            setSlider2(newPercent);
+            // If dragging slider 2 past slider 1, push slider 1 along with it
+            if (newPercent < slider1) {
+                setSlider1(newPercent);
+            }
         }
     };
 
@@ -359,7 +367,7 @@ export default function SkylineClientPage() {
                         </AnimatePresence>
                     </div>
 
-                    {/* TRIPLE IMAGE SLIDER CONTAINER (select-none added here!) */}
+                    {/* TRIPLE IMAGE SLIDER CONTAINER */}
                     <div
                         ref={sliderContainerRef}
                         className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl select-none"
@@ -368,16 +376,16 @@ export default function SkylineClientPage() {
                             <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0 pointer-events-none">
 
                                 {/* LAYER 3 (BASE): FINAL RENDER */}
-                                <Image src={PROCESS_PROJECTS[activeProcessProject].img3.url} alt={PROCESS_PROJECTS[activeProcessProject].img3.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
+                                <Image priority src={PROCESS_PROJECTS[activeProcessProject].img3.url} alt={PROCESS_PROJECTS[activeProcessProject].img3.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
 
                                 {/* LAYER 2 (MIDDLE): 3D MODEL */}
                                 <div className="absolute inset-0 z-10" style={{ clipPath: `inset(0 ${100 - slider2}% 0 0)` }}>
-                                    <Image src={PROCESS_PROJECTS[activeProcessProject].img2.url} alt={PROCESS_PROJECTS[activeProcessProject].img2.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
+                                    <Image priority src={PROCESS_PROJECTS[activeProcessProject].img2.url} alt={PROCESS_PROJECTS[activeProcessProject].img2.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
                                 </div>
 
                                 {/* LAYER 1 (TOP): SKETCH */}
                                 <div className="absolute inset-0 z-20" style={{ clipPath: `inset(0 ${100 - slider1}% 0 0)` }}>
-                                    <Image src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
+                                    <Image priority src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
                                 </div>
 
                                 <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/90 to-transparent z-10" />
