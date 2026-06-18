@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ChevronLeft, ChevronRight, ArrowRight, MapPin, Building2, Home, Box, X, Menu
@@ -66,7 +66,6 @@ const SERVICES = [
     { title: "3D Visualization", icon: <Box className="w-6 h-6 stroke-[1.2]" />, description: "Photorealistic spatial rendering and real-time structural interaction, allowing exact verification prior to execution." }
 ];
 
-// NOTICE: Showroom is intentionally excluded from the navigation links here
 const NAV_LINKS = [
     { label: "Home", href: "#hero" },
     { label: "Process", href: "#process" },
@@ -122,6 +121,8 @@ export default function SkylineClientPage() {
     const [activeProcessProject, setActiveProcessProject] = useState(0);
     const [slider1, setSlider1] = useState(33);
     const [slider2, setSlider2] = useState(66);
+    const sliderContainerRef = useRef<HTMLDivElement>(null);
+    const [draggingSlider, setDraggingSlider] = useState<1 | 2 | null>(null);
 
     // SHOWROOM STATE
     const [activeShowroom, setActiveShowroom] = useState(0);
@@ -162,6 +163,31 @@ export default function SkylineClientPage() {
         setActiveProcessProject((prev) => (prev === 0 ? PROCESS_PROJECTS.length - 1 : prev - 1));
         setSlider1(33); setSlider2(66);
     }, []);
+
+    // CUSTOM SLIDER LOGIC
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>, sliderNum: 1 | 2) => {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        setDraggingSlider(sliderNum);
+    };
+
+    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!draggingSlider || !sliderContainerRef.current) return;
+
+        const rect = sliderContainerRef.current.getBoundingClientRect();
+        let newPercent = ((e.clientX - rect.left) / rect.width) * 100;
+        newPercent = Math.max(0, Math.min(100, newPercent));
+
+        if (draggingSlider === 1) {
+            setSlider1(Math.min(newPercent, slider2));
+        } else if (draggingSlider === 2) {
+            setSlider2(Math.max(newPercent, slider1));
+        }
+    };
+
+    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+        setDraggingSlider(null);
+    };
 
     useEffect(() => {
         if (isMobileMenuOpen) document.body.style.overflow = 'hidden';
@@ -210,7 +236,7 @@ export default function SkylineClientPage() {
                     </a>
                 </div>
 
-                {/* DESKTOP NAV (No Showroom Tab here) */}
+                {/* DESKTOP NAV */}
                 <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-[10px] uppercase tracking-[0.3em] font-medium text-white/90 pointer-events-auto">
                     {NAV_LINKS.map((link) => (
                         <a
@@ -333,10 +359,13 @@ export default function SkylineClientPage() {
                         </AnimatePresence>
                     </div>
 
-                    {/* TRIPLE IMAGE SLIDER CONTAINER */}
-                    <div className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl">
+                    {/* TRIPLE IMAGE SLIDER CONTAINER (select-none added here!) */}
+                    <div
+                        ref={sliderContainerRef}
+                        className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl select-none"
+                    >
                         <AnimatePresence mode="wait">
-                            <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0">
+                            <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0 pointer-events-none">
 
                                 {/* LAYER 3 (BASE): FINAL RENDER */}
                                 <Image src={PROCESS_PROJECTS[activeProcessProject].img3.url} alt={PROCESS_PROJECTS[activeProcessProject].img3.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
@@ -351,10 +380,10 @@ export default function SkylineClientPage() {
                                     <Image src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
                                 </div>
 
-                                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/90 to-transparent z-10 pointer-events-none" />
+                                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/90 to-transparent z-10" />
 
                                 {/* SINGLE PROJECT TITLE (Centered) */}
-                                <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-30 pointer-events-none px-4">
+                                <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-30 px-4">
                                     <h3 className="font-serif text-2xl md:text-4xl text-white drop-shadow-lg">
                                         {PROCESS_PROJECTS[activeProcessProject].title}
                                     </h3>
@@ -363,61 +392,53 @@ export default function SkylineClientPage() {
                         </AnimatePresence>
 
                         {/* HANDLE 1 (Phase 1 ➔ Phase 2) */}
-                        <div className="absolute top-0 bottom-0 w-[2px] bg-white z-40 pointer-events-none drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" style={{ left: `${slider1}%` }}>
-                            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-xl border-2 border-black/10 flex items-center justify-center transition-transform duration-300">
-                                <div className="flex items-center -space-x-1.5 md:-space-x-2 text-neutral-900">
-                                    <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
-                                    <ChevronRight className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+                        <div
+                            className="absolute top-0 bottom-0 w-8 -ml-4 z-40 touch-none flex justify-center cursor-ew-resize group"
+                            style={{ left: `${slider1}%` }}
+                            onPointerDown={(e) => handlePointerDown(e, 1)}
+                            onPointerMove={handlePointerMove}
+                            onPointerUp={handlePointerUp}
+                            onPointerCancel={handlePointerUp}
+                        >
+                            {/* The vertical line */}
+                            <div className="w-[2px] h-full bg-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] relative">
+                                {/* The circular grabber */}
+                                <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-xl border-2 border-black/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                                    <div className="flex items-center -space-x-1.5 md:-space-x-2 text-neutral-900">
+                                        <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+                                        <ChevronRight className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* HANDLE 2 (Phase 2 ➔ Phase 3) */}
-                        <div className="absolute top-0 bottom-0 w-[2px] bg-amber-500 z-40 pointer-events-none drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]" style={{ left: `${slider2}%` }}>
-                            <div className="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full shadow-xl border-2 border-white flex items-center justify-center transition-transform duration-300">
-                                <div className="flex items-center -space-x-1.5 md:-space-x-2 text-white">
-                                    <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
-                                    <ChevronRight className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+                        <div
+                            className="absolute top-0 bottom-0 w-8 -ml-4 z-40 touch-none flex justify-center cursor-ew-resize group"
+                            style={{ left: `${slider2}%` }}
+                            onPointerDown={(e) => handlePointerDown(e, 2)}
+                            onPointerMove={handlePointerMove}
+                            onPointerUp={handlePointerUp}
+                            onPointerCancel={handlePointerUp}
+                        >
+                            {/* The vertical line */}
+                            <div className="w-[2px] h-full bg-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.8)] relative">
+                                {/* The circular grabber */}
+                                <div className="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full shadow-xl border-2 border-white flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                                    <div className="flex items-center -space-x-1.5 md:-space-x-2 text-white">
+                                        <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+                                        <ChevronRight className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        {/* SLIDER 1 (WHITE) - Pointer-Events trick to prevent overlapping blocking */}
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={slider1}
-                            onChange={(e) => {
-                                const val = Number(e.target.value);
-                                if (val > slider2) setSlider1(slider2);
-                                else setSlider1(val);
-                            }}
-                            className="absolute inset-0 z-50 opacity-0 cursor-ew-resize w-full h-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-16 [&::-webkit-slider-thumb]:h-full [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-16 [&::-moz-range-thumb]:h-full"
-                            aria-label="Phase 1 Slider"
-                        />
-
-                        {/* SLIDER 2 (AMBER) - Pointer-Events trick to prevent overlapping blocking */}
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={slider2}
-                            onChange={(e) => {
-                                const val = Number(e.target.value);
-                                if (val < slider1) setSlider2(slider1);
-                                else setSlider2(val);
-                            }}
-                            className="absolute inset-0 z-50 opacity-0 cursor-ew-resize w-full h-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-16 [&::-webkit-slider-thumb]:h-full [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-16 [&::-moz-range-thumb]:h-full"
-                            aria-label="Phase 2 Slider"
-                        />
                     </div>
 
                     {/* BOTTOM CONTROLS (Dots + Prev/Next Buttons) */}
                     <div className="flex justify-between items-center mt-6 md:mt-8 w-full max-w-md mx-auto px-4 sm:px-0">
                         <button
                             onClick={prevProcessProject}
-                            className="px-4 py-2 text-neutral-500 hover:text-amber-500 transition-colors bg-neutral-900 hover:bg-neutral-800 rounded-sm border border-neutral-800 text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
+                            className="py-2 px-2 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
                             aria-label="Previous Category"
                         >
                             PREV
@@ -436,7 +457,7 @@ export default function SkylineClientPage() {
 
                         <button
                             onClick={nextProcessProject}
-                            className="px-4 py-2 text-neutral-500 hover:text-amber-500 transition-colors bg-neutral-900 hover:bg-neutral-800 rounded-sm border border-neutral-800 text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
+                            className="py-2 px-2 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
                             aria-label="Next Category"
                         >
                             NEXT
@@ -446,7 +467,6 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            {/* RESTORED SHOWROOM SECTION */}
             <section id="showroom" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-900 text-white relative border-t border-neutral-800">
                 <div className="max-w-[1400px] mx-auto">
                     <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-16 gap-6">
