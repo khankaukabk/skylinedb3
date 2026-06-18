@@ -1,14 +1,15 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ChevronLeft, ChevronRight, ArrowRight, MapPin, Building2, Home, Box, X, Menu
 } from 'lucide-react';
 import Image from 'next/image';
 
-// IMPORT YOUR NEW SHOWROOM COMPONENT HERE
+// --- COMPONENT IMPORTS ---
 import InteractiveShowroom from './InteractiveShowroom';
+import ExecutionMatrix from './ExecutionMatrix';
 
 // --- UTILITIES ---
 function cn(...classes: (string | undefined | null | false)[]) {
@@ -29,33 +30,6 @@ const HERO_SLIDES = [
     { id: 3, image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2500&auto=format&fit=crop", title: "Lumina Cultural Center", description: "Civic architecture engineered to anchor community development while maintaining strict fiscal parameters and maximum spatial yield." }
 ];
 
-const PROCESS_PROJECTS = [
-    {
-        id: "residential",
-        title: "Verde Private Estate",
-        category: "Residential Architecture",
-        img1: { label: "Architectural Sketch", url: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2500&auto=format&fit=crop" },
-        img2: { label: "3D Massing Model", url: "https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2500&auto=format&fit=crop&grayscale=1" },
-        img3: { label: "Final Render", url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2500&auto=format&fit=crop" }
-    },
-    {
-        id: "commercial",
-        title: "The Apex Hub",
-        category: "Commercial Real Estate",
-        img1: { label: "Site Context", url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop&grayscale=1" },
-        img2: { label: "Structural Framework", url: "https://images.unsplash.com/photo-1536895058696-a69b1c7ba34d?q=80&w=2500&auto=format&fit=crop" },
-        img3: { label: "Market Ready Render", url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop" }
-    },
-    {
-        id: "masterplan",
-        title: "Foundry55 Sector",
-        category: "Masterplan Development",
-        img1: { label: "Zoning Concept", url: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2500&auto=format&fit=crop" },
-        img2: { label: "3D Sector Map", url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop&grayscale=1" },
-        img3: { label: "Completed Sector", url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop" }
-    }
-];
-
 const SERVICES = [
     { title: "Land Planning", icon: <MapPin className="w-6 h-6 stroke-[1.2]" />, description: "Strategic terrain evaluation and zoning optimization designed to guarantee maximum parcel yield and regulatory compliance." },
     { title: "Masterplanning", icon: <Building2 className="w-6 h-6 stroke-[1.2]" />, description: "Comprehensive urban and sector frameworks seamlessly integrating infrastructure, commerce, and public transit corridors." },
@@ -65,7 +39,7 @@ const SERVICES = [
 
 const NAV_LINKS = [
     { label: "Home", href: "#hero" },
-    { label: "Showroom", href: "#showroom" }, // Added showroom back to nav contextually
+    { label: "Showroom", href: "#showroom" },
     { label: "Process", href: "#process" },
     { label: "Services", href: "#services" },
     { label: "Team", href: "#team" },
@@ -114,14 +88,6 @@ function FloatingInquiriesButton() {
 export default function SkylineClientPage() {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-
-    // TRIPLE SLIDER STATE
-    const [activeProcessProject, setActiveProcessProject] = useState(0);
-    const [slider1, setSlider1] = useState(33);
-    const [slider2, setSlider2] = useState(66);
-    const sliderContainerRef = useRef<HTMLDivElement>(null);
-    const [draggingSlider, setDraggingSlider] = useState<1 | 2 | null>(null);
-
     const [showUpdateBanner, setShowUpdateBanner] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -147,43 +113,6 @@ export default function SkylineClientPage() {
         setIsAutoPlaying(false);
         setCurrentSlide(index);
         setTimeout(() => setIsAutoPlaying(true), 10000);
-    };
-
-    const nextProcessProject = useCallback(() => {
-        setActiveProcessProject((prev) => (prev === PROCESS_PROJECTS.length - 1 ? 0 : prev + 1));
-        setSlider1(33); setSlider2(66);
-    }, []);
-
-    const prevProcessProject = useCallback(() => {
-        setActiveProcessProject((prev) => (prev === 0 ? PROCESS_PROJECTS.length - 1 : prev - 1));
-        setSlider1(33); setSlider2(66);
-    }, []);
-
-    // CUSTOM SLIDER LOGIC
-    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>, sliderNum: 1 | 2) => {
-        e.currentTarget.setPointerCapture(e.pointerId);
-        setDraggingSlider(sliderNum);
-    };
-
-    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-        if (!draggingSlider || !sliderContainerRef.current) return;
-
-        const rect = sliderContainerRef.current.getBoundingClientRect();
-        let newPercent = ((e.clientX - rect.left) / rect.width) * 100;
-        newPercent = Math.max(0, Math.min(100, newPercent));
-
-        if (draggingSlider === 1) {
-            setSlider1(newPercent);
-            if (newPercent > slider2) setSlider2(newPercent);
-        } else if (draggingSlider === 2) {
-            setSlider2(newPercent);
-            if (newPercent < slider1) setSlider1(newPercent);
-        }
-    };
-
-    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-        e.currentTarget.releasePointerCapture(e.pointerId);
-        setDraggingSlider(null);
     };
 
     useEffect(() => {
@@ -233,7 +162,6 @@ export default function SkylineClientPage() {
                     </a>
                 </div>
 
-                {/* DESKTOP NAV */}
                 <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-[10px] uppercase tracking-[0.3em] font-medium text-white/90 pointer-events-auto">
                     {NAV_LINKS.map((link) => (
                         <a
@@ -332,129 +260,11 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            {/* ========================================= */}
-            {/* INTERACTIVE SHOWROOM COMPONENT PLACED HERE */}
-            {/* ========================================= */}
-
+            {/* INTERACTIVE SHOWROOM */}
             <InteractiveShowroom />
 
-            {/* ========================================= */}
-            {/* ========================================= */}
-
-            {/* PROCESS SECTION */}
-            <section id="process" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-950 text-white relative">
-                <div className="max-w-[1400px] mx-auto">
-                    <div className="flex flex-col items-center text-center mb-8 md:mb-12">
-                        <span className="text-amber-500 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
-                            Execution Matrix
-                        </span>
-                        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight mb-6">
-                            Vision to Reality.
-                        </h2>
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={activeProcessProject}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.2 }}
-                                className="px-5 py-3 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border border-amber-500 bg-amber-500/10 text-amber-400 rounded-sm font-sans text-center whitespace-nowrap shadow-[0_0_15px_rgba(245,158,11,0.1)]"
-                            >
-                                {PROCESS_PROJECTS[activeProcessProject].category}
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-
-                    <div
-                        ref={sliderContainerRef}
-                        className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl select-none"
-                    >
-                        <AnimatePresence mode="wait">
-                            <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0 pointer-events-none">
-                                <Image priority src={PROCESS_PROJECTS[activeProcessProject].img3.url} alt={PROCESS_PROJECTS[activeProcessProject].img3.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
-                                <div className="absolute inset-0 z-10" style={{ clipPath: `inset(0 ${100 - slider2}% 0 0)` }}>
-                                    <Image priority src={PROCESS_PROJECTS[activeProcessProject].img2.url} alt={PROCESS_PROJECTS[activeProcessProject].img2.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
-                                </div>
-                                <div className="absolute inset-0 z-20" style={{ clipPath: `inset(0 ${100 - slider1}% 0 0)` }}>
-                                    <Image priority src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
-                                </div>
-                                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/90 to-transparent z-10" />
-                                <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-30 px-4">
-                                    <h3 className="font-serif text-2xl md:text-4xl text-white drop-shadow-lg">
-                                        {PROCESS_PROJECTS[activeProcessProject].title}
-                                    </h3>
-                                </div>
-                            </motion.div>
-                        </AnimatePresence>
-
-                        <div
-                            className="absolute top-0 bottom-0 w-8 -ml-4 z-40 touch-none flex justify-center cursor-ew-resize group"
-                            style={{ left: `${slider1}%` }}
-                            onPointerDown={(e) => handlePointerDown(e, 1)}
-                            onPointerMove={handlePointerMove}
-                            onPointerUp={handlePointerUp}
-                            onPointerCancel={handlePointerUp}
-                        >
-                            <div className="w-[2px] h-full bg-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] relative">
-                                <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-xl border-2 border-black/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                                    <div className="flex items-center -space-x-1.5 md:-space-x-2 text-neutral-900">
-                                        <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
-                                        <ChevronRight className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            className="absolute top-0 bottom-0 w-8 -ml-4 z-40 touch-none flex justify-center cursor-ew-resize group"
-                            style={{ left: `${slider2}%` }}
-                            onPointerDown={(e) => handlePointerDown(e, 2)}
-                            onPointerMove={handlePointerMove}
-                            onPointerUp={handlePointerUp}
-                            onPointerCancel={handlePointerUp}
-                        >
-                            <div className="w-[2px] h-full bg-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.8)] relative">
-                                <div className="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full shadow-xl border-2 border-white flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                                    <div className="flex items-center -space-x-1.5 md:-space-x-2 text-white">
-                                        <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
-                                        <ChevronRight className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex justify-between items-center mt-6 md:mt-8 w-full max-w-md mx-auto px-4 sm:px-0">
-                        <button
-                            onClick={prevProcessProject}
-                            className="py-2 px-2 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
-                            aria-label="Previous Category"
-                        >
-                            PREV
-                        </button>
-
-                        <div className="flex gap-3">
-                            {PROCESS_PROJECTS.map((_, idx) => (
-                                <button
-                                    key={idx}
-                                    onClick={() => { setActiveProcessProject(idx); setSlider1(33); setSlider2(66); }}
-                                    className={cn("h-1.5 rounded-full transition-all duration-300", activeProcessProject === idx ? "w-8 bg-amber-500" : "w-2 bg-neutral-700 hover:bg-neutral-500")}
-                                    aria-label={`Go to project ${idx + 1}`}
-                                />
-                            ))}
-                        </div>
-
-                        <button
-                            onClick={nextProcessProject}
-                            className="py-2 px-2 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
-                            aria-label="Next Category"
-                        >
-                            NEXT
-                        </button>
-                    </div>
-                </div>
-            </section>
-
+            {/* EXECUTION MATRIX (The 4-Phase Isolated Component) */}
+            <ExecutionMatrix />
 
             {/* SERVICES SECTION */}
             <section id="services" className="py-16 md:py-40 px-5 md:px-12 bg-[#F4F4F2] border-t border-neutral-200">
