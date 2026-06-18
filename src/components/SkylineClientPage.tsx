@@ -39,22 +39,25 @@ const PROCESS_PROJECTS = [
         id: "residential",
         title: "Verde Private Estate",
         category: "Residential Architecture",
-        before: { name: "Architectural Sketch", image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2500&auto=format&fit=crop" },
-        after: { name: "Final Render", image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2500&auto=format&fit=crop" }
+        img1: { label: "Architectural Sketch", url: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2500&auto=format&fit=crop" },
+        img2: { label: "3D Massing Model", url: "https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2500&auto=format&fit=crop&grayscale=1" },
+        img3: { label: "Final Render", url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2500&auto=format&fit=crop" }
     },
     {
         id: "commercial",
         title: "The Apex Hub",
         category: "Commercial Real Estate",
-        before: { name: "3D Massing Model", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop&grayscale=1" },
-        after: { name: "Market Ready Render", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop" }
+        img1: { label: "Site Context", url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop&grayscale=1" },
+        img2: { label: "Structural Framework", url: "https://images.unsplash.com/photo-1536895058696-a69b1c7ba34d?q=80&w=2500&auto=format&fit=crop" },
+        img3: { label: "Market Ready Render", url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop" }
     },
     {
         id: "masterplan",
         title: "Foundry55 Sector",
         category: "Masterplan Development",
-        before: { name: "Zoning Concept", image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2500&auto=format&fit=crop" },
-        after: { name: "Completed Sector", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop" }
+        img1: { label: "Zoning Concept", url: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2500&auto=format&fit=crop" },
+        img2: { label: "3D Sector Map", url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop&grayscale=1" },
+        img3: { label: "Completed Sector", url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop" }
     }
 ];
 
@@ -108,8 +111,12 @@ export default function SkylineClientPage() {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const [activeModelIndex, setActiveModelIndex] = useState(0);
+
+    // TRIPLE SLIDER STATE
     const [activeProcessProject, setActiveProcessProject] = useState(0);
-    const [compareSliderPos, setCompareSliderPos] = useState(50);
+    const [slider1, setSlider1] = useState(33);
+    const [slider2, setSlider2] = useState(66);
+
     const [showUpdateBanner, setShowUpdateBanner] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -139,13 +146,14 @@ export default function SkylineClientPage() {
 
     const nextProcessProject = useCallback(() => {
         setActiveProcessProject((prev) => (prev === PROCESS_PROJECTS.length - 1 ? 0 : prev + 1));
+        setSlider1(33); setSlider2(66);
     }, []);
 
     const prevProcessProject = useCallback(() => {
         setActiveProcessProject((prev) => (prev === 0 ? PROCESS_PROJECTS.length - 1 : prev - 1));
+        setSlider1(33); setSlider2(66);
     }, []);
 
-    useEffect(() => setCompareSliderPos(50), [activeProcessProject]);
     useEffect(() => {
         if (isMobileMenuOpen) document.body.style.overflow = 'hidden';
         else document.body.style.overflow = 'unset';
@@ -193,10 +201,11 @@ export default function SkylineClientPage() {
                 </div>
 
                 <nav className="hidden md:flex items-center gap-10 text-[10px] uppercase tracking-[0.3em] font-medium text-white/90 pointer-events-auto">
+                    <Link href="/" className="text-amber-400 hover:text-white transition-colors font-bold">Home</Link>
                     <Link href="/projects" className="hover:text-amber-400 transition-colors">Projects</Link>
                     <a href="#services" className="hover:text-amber-400 transition-colors">Services</a>
                     <Link href="/about" className="hover:text-amber-400 transition-colors">About</Link>
-                    <a href="#contact" className="text-amber-400 hover:text-white transition-colors font-bold">Connect</a>
+                    <a href="#contact" className="hover:text-amber-400 transition-colors">Connect</a>
                 </nav>
 
                 <button className="md:hidden pointer-events-auto text-white p-2" onClick={() => setIsMobileMenuOpen(true)} aria-label="Open Menu">
@@ -216,10 +225,11 @@ export default function SkylineClientPage() {
                             <X className="w-8 h-8" strokeWidth={1.5} />
                         </button>
                         <nav className="flex flex-col gap-8 text-2xl font-serif text-white/80 tracking-wide">
+                            <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-amber-500 font-bold transition-colors">Home</Link>
                             <Link href="/projects" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Projects</Link>
                             <a href="#services" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Services</a>
                             <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">About</Link>
-                            <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="text-amber-500 font-bold mt-4">Connect</a>
+                            <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors mt-4">Connect</a>
                         </nav>
                     </motion.div>
                 )}
@@ -352,7 +362,7 @@ export default function SkylineClientPage() {
                             {PROCESS_PROJECTS.map((project, idx) => (
                                 <button
                                     key={project.id}
-                                    onClick={() => setActiveProcessProject(idx)}
+                                    onClick={() => { setActiveProcessProject(idx); setSlider1(33); setSlider2(66); }}
                                     className={cn(
                                         "px-4 py-2.5 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border transition-all duration-300 rounded-sm font-sans flex-grow sm:flex-grow-0",
                                         activeProcessProject === idx ? "border-amber-500 bg-amber-500/10 text-amber-400" : "border-neutral-800 text-neutral-500 hover:border-neutral-600 hover:text-neutral-300"
@@ -364,25 +374,28 @@ export default function SkylineClientPage() {
                         </div>
                     </div>
 
+                    {/* TRIPLE IMAGE SLIDER CONTAINER */}
                     <div className="relative w-full aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl">
                         <AnimatePresence mode="wait">
                             <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0">
-                                <Image src={PROCESS_PROJECTS[activeProcessProject].after.image} alt={PROCESS_PROJECTS[activeProcessProject].after.name} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
-                                <div className="absolute inset-0 z-10" style={{ clipPath: `inset(0 ${100 - compareSliderPos}% 0 0)` }}>
-                                    <Image src={PROCESS_PROJECTS[activeProcessProject].before.image} alt={PROCESS_PROJECTS[activeProcessProject].before.name} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
+
+                                {/* LAYER 3 (BASE): FINAL RENDER */}
+                                <Image src={PROCESS_PROJECTS[activeProcessProject].img3.url} alt={PROCESS_PROJECTS[activeProcessProject].img3.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
+
+                                {/* LAYER 2 (MIDDLE): 3D MODEL */}
+                                <div className="absolute inset-0 z-10" style={{ clipPath: `inset(0 ${100 - slider2}% 0 0)` }}>
+                                    <Image src={PROCESS_PROJECTS[activeProcessProject].img2.url} alt={PROCESS_PROJECTS[activeProcessProject].img2.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
                                 </div>
+
+                                {/* LAYER 1 (TOP): SKETCH */}
+                                <div className="absolute inset-0 z-20" style={{ clipPath: `inset(0 ${100 - slider1}% 0 0)` }}>
+                                    <Image src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px" />
+                                </div>
+
                                 <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/90 to-transparent z-10 pointer-events-none" />
-                                <div className="absolute top-4 md:top-6 left-4 md:left-6 z-20 pointer-events-none bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-sm border border-white/10 hidden sm:block">
-                                    <p className="text-white text-[8px] md:text-[9px] uppercase tracking-widest font-bold font-sans">
-                                        Before: <span className="text-amber-500">{PROCESS_PROJECTS[activeProcessProject].before.name}</span>
-                                    </p>
-                                </div>
-                                <div className="absolute top-4 md:top-6 right-4 md:right-6 z-20 pointer-events-none bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-sm border border-white/10 hidden sm:block">
-                                    <p className="text-white text-[8px] md:text-[9px] uppercase tracking-widest font-bold font-sans">
-                                        After: <span className="text-amber-500">{PROCESS_PROJECTS[activeProcessProject].after.name}</span>
-                                    </p>
-                                </div>
-                                <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-20 pointer-events-none px-4">
+
+                                {/* SINGLE PROJECT TITLE (Centered) */}
+                                <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-30 pointer-events-none px-4">
                                     <h3 className="font-serif text-2xl md:text-4xl text-white drop-shadow-lg">
                                         {PROCESS_PROJECTS[activeProcessProject].title}
                                     </h3>
@@ -390,16 +403,42 @@ export default function SkylineClientPage() {
                             </motion.div>
                         </AnimatePresence>
 
-                        <div className="absolute top-0 bottom-0 w-[2px] bg-amber-500 z-20 pointer-events-none drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]" style={{ left: `${compareSliderPos}%` }}>
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full flex items-center justify-center shadow-xl border-2 border-white">
-                                <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white ml-0.5" strokeWidth={3} />
-                                <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white -ml-2 mr-0.5" strokeWidth={3} />
+                        {/* HANDLE 1 (Phase 1 ➔ Phase 2) */}
+                        <div className="absolute top-0 bottom-0 w-[2px] bg-white z-40 pointer-events-none drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" style={{ left: `${slider1}%` }}>
+                            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-xl border-2 border-black/10 flex items-center justify-center transition-transform duration-300">
+                                <div className="flex items-center -space-x-1.5 md:-space-x-2 text-neutral-900">
+                                    <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+                                    <ChevronRight className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+                                </div>
                             </div>
                         </div>
 
-                        <input type="range" min="0" max="100" value={compareSliderPos} onChange={(e) => setCompareSliderPos(Number(e.target.value))} className="absolute inset-0 z-30 opacity-0 cursor-ew-resize w-full h-full" aria-label="Before/After Slider" />
+                        {/* HANDLE 2 (Phase 2 ➔ Phase 3) */}
+                        <div className="absolute top-0 bottom-0 w-[2px] bg-amber-500 z-40 pointer-events-none drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]" style={{ left: `${slider2}%` }}>
+                            <div className="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full shadow-xl border-2 border-white flex items-center justify-center transition-transform duration-300">
+                                <div className="flex items-center -space-x-1.5 md:-space-x-2 text-white">
+                                    <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+                                    <ChevronRight className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* INVISIBLE RANGE INPUTS: Pushing logic implemented to drag both when merged */}
+                        {/* Note: 'touch-none' prevents horizontal swiping from scrolling the whole page or triggering 'back' navigation on mobile */}
+                        <input type="range" min="0" max="100" value={slider1} onChange={(e) => {
+                            const val = Number(e.target.value);
+                            setSlider1(val);
+                            if (val > slider2) setSlider2(val);
+                        }} className="absolute top-0 inset-x-0 h-1/2 z-50 opacity-0 cursor-ew-resize w-full touch-none" aria-label="Phase 1 Slider" />
+
+                        <input type="range" min="0" max="100" value={slider2} onChange={(e) => {
+                            const val = Number(e.target.value);
+                            setSlider2(val);
+                            if (val < slider1) setSlider1(val);
+                        }} className="absolute bottom-0 inset-x-0 h-1/2 z-50 opacity-0 cursor-ew-resize w-full touch-none" aria-label="Phase 2 Slider" />
                     </div>
 
+                    {/* DOT NAVIGATION FOR PROJECTS */}
                     <div className="flex justify-between items-center mt-6 w-full max-w-sm mx-auto px-4 sm:px-0">
                         <button onClick={prevProcessProject} className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors group py-2" aria-label="Previous Project">
                             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -448,7 +487,6 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            {/* NEW SECTION: STUDIO PHILOSOPHY TEASER */}
             <section id="studio" className="py-16 md:py-40 px-5 md:px-12 bg-white border-t border-neutral-200 relative">
                 <div className="max-w-[1400px] mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
