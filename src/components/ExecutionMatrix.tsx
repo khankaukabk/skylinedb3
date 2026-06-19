@@ -95,7 +95,7 @@ export default function ExecutionMatrix() {
     };
 
     return (
-        <section id="process" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-950 text-white relative">
+        <section id="process" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-950 text-white relative overflow-hidden">
             <div className="max-w-[1400px] mx-auto">
                 {/* Header */}
                 <div className="flex flex-col items-center text-center mb-8 md:mb-12">
@@ -122,13 +122,12 @@ export default function ExecutionMatrix() {
                 {/* 4-Phase Slider Container */}
                 <div
                     ref={sliderContainerRef}
-                    className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl select-none"
+                    className="relative w-full aspect-[3/4] min-h-[450px] sm:aspect-square md:min-h-0 md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl select-none"
                 >
                     {/* STATIC LINE & LABEL 1: CONCEPT (Pinned to Left Edge) */}
                     <div className="absolute top-0 bottom-0 left-0 w-[1px] bg-white/30 z-[55] pointer-events-none">
-                        {/* Box styling updated to solid Amber/Yellow with dark text for high visibility */}
-                        <div className="absolute top-[15%] left-0 ml-1 -translate-y-1/2 bg-amber-500 px-2 py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600/50">
-                            <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap font-mono select-none">
+                        <div className="absolute top-[12%] left-0 ml-[2px] md:ml-1 -translate-y-1/2 bg-amber-500 px-1.5 md:px-2 py-4 md:py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600/50">
+                            <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap font-mono select-none">
                                 Concept
                             </span>
                         </div>
@@ -154,7 +153,7 @@ export default function ExecutionMatrix() {
                                 <Image priority src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, 1400px" />
                             </div>
 
-                            <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/90 to-transparent z-30" />
+                            <div className="absolute inset-x-0 bottom-0 h-48 md:h-40 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-30" />
                             <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-40 px-4">
                                 <h3 className="font-serif text-2xl md:text-4xl text-white drop-shadow-lg">
                                     {PROCESS_PROJECTS[activeProcessProject].title}
@@ -165,17 +164,16 @@ export default function ExecutionMatrix() {
 
                     {/* SLIDER 1 HANDLE (Layout) */}
                     <div
-                        className="absolute top-0 bottom-0 w-8 -ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
+                        className="absolute top-0 bottom-0 w-12 -ml-6 md:w-8 md:-ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider1}%` }}
                         onPointerDown={(e) => handlePointerDown(e, 1)}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        <div className="w-[1px] h-full bg-white/30 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
-                            {/* Solid high-visibility Box */}
-                            <div className="absolute top-[40%] left-full ml-1 -translate-y-1/2 bg-amber-500 px-2 py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap pointer-events-none font-mono select-none">
+                        <div className="w-[1px] h-full bg-white/40 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
+                            <div className="absolute top-[38%] left-full ml-[2px] md:ml-1 -translate-y-1/2 bg-amber-500 px-1.5 md:px-2 py-4 md:py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50 pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap font-mono select-none">
                                     Layout
                                 </span>
                             </div>
@@ -184,18 +182,16 @@ export default function ExecutionMatrix() {
 
                     {/* SLIDER 2 HANDLE (Model - Amber Highlight Line) */}
                     <div
-                        className="absolute top-0 bottom-0 w-8 -ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
+                        className="absolute top-0 bottom-0 w-12 -ml-6 md:w-8 md:-ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider2}%` }}
                         onPointerDown={(e) => handlePointerDown(e, 2)}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        {/* Model line already amber-highlighted */}
-                        <div className="w-[1px] h-full bg-amber-500/50 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
-                            {/* Solid high-visibility Box (consistent with others) */}
-                            <div className="absolute top-[65%] left-full ml-1 -translate-y-1/2 bg-amber-500 px-2 py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap pointer-events-none font-mono select-none">
+                        <div className="w-[1px] h-full bg-amber-500/60 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
+                            <div className="absolute top-[64%] left-full ml-[2px] md:ml-1 -translate-y-1/2 bg-amber-500 px-1.5 md:px-2 py-4 md:py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50 pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap font-mono select-none">
                                     Model
                                 </span>
                             </div>
@@ -204,17 +200,16 @@ export default function ExecutionMatrix() {
 
                     {/* SLIDER 3 HANDLE (Realism) */}
                     <div
-                        className="absolute top-0 bottom-0 w-8 -ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
+                        className="absolute top-0 bottom-0 w-12 -ml-6 md:w-8 md:-ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider3}%` }}
                         onPointerDown={(e) => handlePointerDown(e, 3)}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        <div className="w-[1px] h-full bg-white/30 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
-                            {/* Solid high-visibility Box */}
-                            <div className="absolute top-[90%] left-full ml-1 -translate-y-1/2 bg-amber-500 px-2 py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap pointer-events-none font-mono select-none">
+                        <div className="w-[1px] h-full bg-white/40 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
+                            <div className="absolute top-[88%] left-full ml-[2px] md:ml-1 -translate-y-1/2 bg-amber-500 px-1.5 md:px-2 py-4 md:py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50 pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap font-mono select-none">
                                     Realism
                                 </span>
                             </div>
@@ -226,11 +221,11 @@ export default function ExecutionMatrix() {
                 <div className="flex justify-between items-center mt-6 md:mt-8 w-full max-w-md mx-auto px-4 sm:px-0">
                     <button
                         onClick={prevProcessProject}
-                        className="py-2 px-2 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] flex items-center gap-1.5 group"
+                        className="py-3 px-3 -ml-3 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] flex items-center gap-1.5 group"
                         aria-label="Previous Category"
                     >
                         <ArrowLeft className="w-3 h-3 md:w-4 md:h-4 group-hover:-translate-x-1 transition-transform" />
-                        PREV
+                        <span className="hidden sm:inline">PREV</span>
                     </button>
 
                     <div className="flex gap-3">
@@ -246,10 +241,10 @@ export default function ExecutionMatrix() {
 
                     <button
                         onClick={nextProcessProject}
-                        className="py-2 px-2 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] flex items-center gap-1.5 group"
+                        className="py-3 px-3 -mr-3 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] flex items-center gap-1.5 group"
                         aria-label="Next Category"
                     >
-                        NEXT
+                        <span className="hidden sm:inline">NEXT</span>
                         <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
                     </button>
                 </div>
