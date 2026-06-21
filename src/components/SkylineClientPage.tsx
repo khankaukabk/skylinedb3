@@ -37,13 +37,14 @@ const SERVICES = [
     { title: "3D Visualization", icon: <Box className="w-6 h-6 stroke-[1.2]" />, description: "Photorealistic spatial rendering and real-time structural interaction, allowing exact verification prior to execution." }
 ];
 
+// UPDATED NAV LINKS (Connect now goes to /contact)
 const NAV_LINKS = [
     { label: "Home", href: "#hero" },
     { label: "Showroom", href: "#showroom" },
     { label: "Process", href: "#process" },
     { label: "Services", href: "#services" },
-    { label: "Team", href: "#team" },
-    { label: "Connect", href: "#contact" }
+    { label: "About", href: "/about" },
+    { label: "Connect", href: "/contact" }
 ];
 
 // --- SUB-COMPONENTS ---
@@ -296,17 +297,24 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
-            {/* TEAM SECTION */}
-            <section id="team" className="py-16 md:py-40 px-5 md:px-12 bg-white border-t border-neutral-200 relative">
+            {/* ABOUT / STUDIO SECTION */}
+            <section id="about" className="py-16 md:py-40 px-5 md:px-12 bg-white border-t border-neutral-200 relative">
                 <div className="max-w-[1400px] mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-                        <div className="relative w-full aspect-[4/3] md:aspect-square bg-neutral-100 overflow-hidden rounded-sm">
-                            <Image src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2500&auto=format&fit=crop" alt="SkylineDB3 Studio Architecture" fill className="object-cover object-center grayscale hover:grayscale-0 transition-all duration-700" sizes="(max-width: 768px) 100vw, 50vw" />
+                        <div className="relative w-full aspect-[4/3] md:aspect-square bg-neutral-100 overflow-hidden rounded-sm group">
+                            <Image
+                                src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2500&auto=format&fit=crop"
+                                alt="SkylineDB3 Studio Architecture"
+                                fill
+                                className="object-cover object-center grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                            />
+                            <div className="absolute inset-4 border border-white/20 z-10 pointer-events-none" />
                         </div>
 
                         <div className="text-left">
                             <span className="text-amber-800 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
-                                The Team
+                                The Studio
                             </span>
                             <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tight mb-6 md:mb-8">
                                 Uncompromising <br />Spatial Engineering.
@@ -314,8 +322,11 @@ export default function SkylineClientPage() {
                             <p className="text-neutral-500 font-light text-sm md:text-lg leading-relaxed font-sans mb-8 md:mb-12">
                                 SkylineDB3 is a highly calibrated collective of spatial engineers, masterplanners, and structural visionaries operating on a global scale. We master the intersection of structural physics and aesthetic form to deliver landmark environments that meet strict developmental and fiscal thresholds.
                             </p>
-                            <a href="#contact" className="inline-flex items-center justify-center border border-neutral-200 text-neutral-800 px-8 py-4 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] hover:border-amber-900 hover:text-amber-900 transition-colors font-sans rounded-sm group">
-                                Connect With Us <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />
+                            <a
+                                href="/about"
+                                className="inline-flex items-center justify-center border border-neutral-200 text-neutral-800 px-8 py-4 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] hover:border-amber-900 hover:text-amber-900 hover:bg-amber-50/50 transition-all font-sans rounded-sm group"
+                            >
+                                Discover Our Philosophy <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />
                             </a>
                         </div>
                     </div>
@@ -323,7 +334,7 @@ export default function SkylineClientPage() {
             </section>
 
             {/* FOOTER CONTACT */}
-            <footer id="contact" className="py-20 md:py-40 px-5 md:px-6 bg-[#F4F4F2] border-t border-neutral-200 relative z-10 text-center">
+            <footer className="py-20 md:py-40 px-5 md:px-6 bg-[#F4F4F2] border-t border-neutral-200 relative z-10 text-center">
                 <div className="max-w-2xl mx-auto">
                     <div className="w-[1px] h-12 md:h-16 bg-amber-900/30 mx-auto mb-8 md:mb-12" />
                     <h2 className="font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl mb-6 md:mb-8 text-neutral-900 tracking-tight font-normal">Architect Certainty.</h2>
@@ -336,7 +347,7 @@ export default function SkylineClientPage() {
                             <span className="relative z-10 flex items-center justify-center gap-2.5"><MessageBubbleIcon className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" /> Private Client Advisory</span>
                             <div className="absolute inset-0 bg-amber-900 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                         </a>
-                        <a href="mailto:skylinedb3.team@gmail.com" className="w-full block border border-neutral-200 bg-white text-neutral-800 py-4 md:py-5 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] hover:border-neutral-900 transition-colors font-sans rounded-sm md:rounded-none">
+                        <a href="/contact" className="w-full block border border-neutral-200 bg-white text-neutral-800 py-4 md:py-5 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] hover:border-neutral-900 transition-colors font-sans rounded-sm md:rounded-none">
                             Direct Dispatch
                         </a>
                     </div>

@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+// IMPORTANT: Import your Navbar component here!
+// (Adjust the path if your Navbar is in a different folder, like "@/components/Navbar")
+import Navbar from "@/components/Navbar";
+
 // Your Firebase Logo URL
 const LOGO_URL = "https://firebasestorage.googleapis.com/v0/b/skylinedb3-e8295.firebasestorage.app/o/Logo%2FSBD.png?alt=media&token=f5776d7f-6da0-447b-a4ee-36d13c24dc73";
 
@@ -78,6 +82,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-[#F9F9F7] m-0 p-0">
+        {/* THIS MAKES YOUR NAVBAR GLOBAL! */}
+        <Navbar />
+
         <main>{children}</main>
       </body>
     </html>

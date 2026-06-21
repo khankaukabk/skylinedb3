@@ -1,13 +1,16 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, X, Menu } from 'lucide-react';
+import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { MapPin } from 'lucide-react';
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+function cn(...classes: ClassValue[]) {
+  return twMerge(clsx(classes));
+}
 
 // --- CONFIG & ASSETS ---
-const LOGO_URL = "https://firebasestorage.googleapis.com/v0/b/skylinedb3-e8295.firebasestorage.app/o/Logo%2FSBD.png?alt=media&token=f5776d7f-6da0-447b-a4ee-36d13c24dc73";
 const SUPPORT_NUMBER_DIGITS = "2052351664";
 const SMS_BODY_MSG = "Hello SkylineDB3 Team, I am interested in commissioning an architectural evaluation.";
 const SMS_LINK = `sms:+1${SUPPORT_NUMBER_DIGITS}?body=${encodeURIComponent(SMS_BODY_MSG)}`;
@@ -25,62 +28,12 @@ const MessageBubbleIcon = ({ className }: { className?: string }) => (
 );
 
 export default function AboutPage() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    if (isMobileMenuOpen) document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = 'unset';
-  }, [isMobileMenuOpen]);
-
   return (
-    <div className="bg-[#F9F9F7] text-neutral-900 min-h-screen font-sans selection:bg-amber-100 selection:text-amber-900">
-
-      {/* SOLID NAVBAR FOR INTERIOR PAGES */}
-      <header className="fixed top-0 left-0 w-full z-50 bg-neutral-950 border-b border-white/10 py-4 px-5 md:px-12 flex justify-between items-center transition-all duration-300">
-        <div className="flex items-center gap-4 pointer-events-auto">
-          <Link href="/">
-            <div className="relative w-28 h-8 md:w-48 md:h-12 hover:opacity-80 transition-opacity">
-              <Image src={LOGO_URL} alt="SkylineDB3" fill className="object-contain object-left opacity-95" priority sizes="(max-width: 768px) 120px, 200px" />
-            </div>
-          </Link>
-        </div>
-
-        <nav className="hidden md:flex items-center gap-10 text-[10px] uppercase tracking-[0.3em] font-medium text-white/90 pointer-events-auto">
-          <Link href="/projects" className="hover:text-amber-400 transition-colors">Projects</Link>
-          <Link href="/#services" className="hover:text-amber-400 transition-colors">Services</Link>
-          <Link href="/about" className="text-amber-400 transition-colors font-bold">About</Link>
-          <Link href="/#contact" className="hover:text-amber-400 transition-colors">Connect</Link>
-        </nav>
-
-        <button className="md:hidden pointer-events-auto text-white p-2" onClick={() => setIsMobileMenuOpen(true)} aria-label="Open Menu">
-          <Menu className="w-6 h-6" />
-        </button>
-      </header>
-
-      {/* MOBILE MENU */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            animate={{ opacity: 1, backdropFilter: "blur(20px)" }}
-            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            className="fixed inset-0 z-[100] bg-black/95 flex flex-col justify-center px-8"
-          >
-            <button className="absolute top-6 right-6 text-white/50 hover:text-white p-2" onClick={() => setIsMobileMenuOpen(false)}>
-              <X className="w-8 h-8" strokeWidth={1.5} />
-            </button>
-            <nav className="flex flex-col gap-8 text-2xl font-serif text-white/80 tracking-wide">
-              <Link href="/projects" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Projects</Link>
-              <Link href="/#services" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors">Services</Link>
-              <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="text-amber-500 transition-colors">About</Link>
-              <Link href="/#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-500 transition-colors mt-4 font-bold">Connect</Link>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    // Padding top respects your global navbar height
+    <div className="bg-[#F9F9F7] text-neutral-900 min-h-screen font-sans selection:bg-amber-100 selection:text-amber-900" style={{ paddingTop: "var(--nav-h, 80px)" }}>
 
       {/* PAGE HERO */}
-      <section className="pt-40 md:pt-56 pb-16 md:pb-32 px-5 md:px-12 bg-white border-b border-neutral-200">
+      <section className="py-20 md:py-32 px-5 md:px-12 bg-white border-b border-neutral-200">
         <div className="max-w-[1400px] mx-auto text-center">
           <span className="text-amber-800 text-[10px] md:text-[12px] font-bold uppercase tracking-[0.4em] mb-4 md:mb-6 block font-sans">
             Firm Profile
