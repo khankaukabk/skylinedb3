@@ -94,6 +94,23 @@ export default function ExecutionMatrix() {
         setDraggingSlider(null);
     };
 
+    // Attempt to force landscape mode
+    const requestLandscapeMode = async () => {
+        try {
+            const el = document.documentElement;
+            if (el.requestFullscreen) {
+                await el.requestFullscreen();
+            }
+            if ('orientation' in screen && 'lock' in screen.orientation) {
+                await (screen.orientation as any).lock('landscape');
+            } else {
+                alert("Please physically rotate your phone sideways for the full architectural view.");
+            }
+        } catch (err) {
+            alert("Please physically rotate your phone sideways for the full architectural view.");
+        }
+    };
+
     return (
         <section id="process" className="py-16 md:py-32 px-5 md:px-12 bg-neutral-950 text-white relative overflow-hidden">
             <div className="max-w-[1400px] mx-auto">
@@ -106,7 +123,7 @@ export default function ExecutionMatrix() {
                         Vision to Reality.
                     </h2>
 
-                    {/* ENLARGED CATEGORY BOX MATCHING SLIDER DEPTH */}
+                    {/* CATEGORY BOX */}
                     <div className="w-full max-w-xl px-4 sm:px-0">
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -123,7 +140,7 @@ export default function ExecutionMatrix() {
                     </div>
                 </div>
 
-                {/* ADAPTIVE CONTAINER: 4:3 on mobile portrait, 16:9 on desktop/landscape */}
+                {/* ADAPTIVE CONTAINER */}
                 <div
                     ref={sliderContainerRef}
                     className="relative w-full aspect-[4/3] md:aspect-[16/9] bg-neutral-900 rounded-none border border-neutral-800 shadow-2xl select-none"
@@ -131,10 +148,10 @@ export default function ExecutionMatrix() {
                     {/* STATIC LINE & LABEL 1: CONCEPT */}
                     <div className="absolute top-0 bottom-0 left-0 w-[3px] md:w-[4px] bg-amber-500 z-[51] pointer-events-none">
                         <div className={cn(
-                            "absolute top-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 transition-opacity duration-200",
+                            "absolute top-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 transition-opacity duration-200",
                             slider1 < 5 ? "opacity-0" : "opacity-100"
                         )}>
-                            <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
+                            <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                 Concept
                             </span>
                         </div>
@@ -142,20 +159,16 @@ export default function ExecutionMatrix() {
 
                     <AnimatePresence mode="wait">
                         <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0 pointer-events-none overflow-hidden">
-                            {/* Base Image (Rightmost - Phase 4) */}
                             <Image priority src={PROCESS_PROJECTS[activeProcessProject].img4.url} alt={PROCESS_PROJECTS[activeProcessProject].img4.label} fill className="object-cover object-center opacity-90" sizes="100vw" />
 
-                            {/* Image 3 clipped by slider 3 */}
                             <div className="absolute inset-0 z-10" style={{ clipPath: `inset(0 ${100 - slider3}% 0 0)` }}>
                                 <Image priority src={PROCESS_PROJECTS[activeProcessProject].img3.url} alt={PROCESS_PROJECTS[activeProcessProject].img3.label} fill className="object-cover object-center opacity-90" sizes="100vw" />
                             </div>
 
-                            {/* Image 2 clipped by slider 2 */}
                             <div className="absolute inset-0 z-20" style={{ clipPath: `inset(0 ${100 - slider2}% 0 0)` }}>
                                 <Image priority src={PROCESS_PROJECTS[activeProcessProject].img2.url} alt={PROCESS_PROJECTS[activeProcessProject].img2.label} fill className="object-cover object-center opacity-90" sizes="100vw" />
                             </div>
 
-                            {/* Image 1 clipped by slider 1 */}
                             <div className="absolute inset-0 z-30" style={{ clipPath: `inset(0 ${100 - slider1}% 0 0)` }}>
                                 <Image priority src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="100vw" />
                             </div>
@@ -180,10 +193,10 @@ export default function ExecutionMatrix() {
                     >
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
                             <div className={cn(
-                                "absolute top-[33.33%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
+                                "absolute top-[33.33%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
                                 (slider2 - slider1 < 2 && slider1 < 50) ? "opacity-0" : "opacity-100"
                             )}>
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Layout
                                 </span>
                             </div>
@@ -201,10 +214,10 @@ export default function ExecutionMatrix() {
                     >
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
                             <div className={cn(
-                                "absolute top-[66.66%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
+                                "absolute top-[66.66%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
                                 (slider3 - slider2 < 2 && slider2 < 50) ? "opacity-0" : "opacity-100"
                             )}>
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Model
                                 </span>
                             </div>
@@ -221,8 +234,8 @@ export default function ExecutionMatrix() {
                         onPointerCancel={handlePointerUp}
                     >
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
-                            <div className="absolute bottom-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
+                            <div className="absolute bottom-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Realism
                                 </span>
                             </div>
@@ -230,14 +243,18 @@ export default function ExecutionMatrix() {
                     </div>
                 </div>
 
-                {/* MOBILE LANDSCAPE HINT */}
-                <div className="md:hidden portrait:flex landscape:hidden items-center justify-center gap-2.5 mt-5 text-neutral-500 animate-pulse">
+                {/* CLICKABLE MOBILE LANDSCAPE HINT */}
+                <button
+                    onClick={requestLandscapeMode}
+                    className="md:hidden portrait:flex landscape:hidden w-full items-center justify-center gap-2.5 mt-5 text-neutral-400 hover:text-amber-500 transition-colors animate-pulse py-2"
+                    aria-label="Force Landscape Mode"
+                >
                     <Smartphone className="w-4 h-4 -rotate-90 transition-transform duration-1000" />
                     <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Rotate device for landscape view</span>
-                </div>
+                </button>
 
                 {/* Bottom Navigation */}
-                <div className="flex justify-between items-center mt-8 md:mt-12 w-full max-w-xl mx-auto px-4 sm:px-0">
+                <div className="flex justify-between items-center mt-6 md:mt-12 w-full max-w-xl mx-auto px-4 sm:px-0">
                     <button
                         onClick={prevProcessProject}
                         className="group flex items-center justify-center gap-1.5 md:gap-2 w-[65px] md:w-[100px] h-[24px] md:h-[32px] border border-amber-600 bg-amber-500 hover:bg-amber-400 text-white transition-all duration-300 font-sans text-[8px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
