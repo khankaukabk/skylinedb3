@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Smartphone } from 'lucide-react';
 import Image from 'next/image';
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -119,15 +119,15 @@ export default function ExecutionMatrix() {
                     </AnimatePresence>
                 </div>
 
-                {/* 4-Phase Slider Container - FORCED LANDSCAPE RATIO FOR MOBILE & DESKTOP */}
+                {/* FULL WIDTH 16:9 SLIDER CONTAINER */}
                 <div
                     ref={sliderContainerRef}
-                    className="relative w-full aspect-[16/9] md:aspect-[21/9] bg-neutral-900 rounded-none overflow-hidden border border-neutral-800 shadow-2xl select-none"
+                    className="relative w-full aspect-[16/9] bg-neutral-900 rounded-none overflow-hidden border border-neutral-800 shadow-2xl select-none"
                 >
                     {/* STATIC LINE & LABEL 1: CONCEPT (Pinned to Left Edge) */}
-                    <div className="absolute top-0 bottom-0 left-0 w-[1px] bg-white/30 z-[55] pointer-events-none">
-                        <div className="absolute top-[15%] -translate-y-1/2 left-0 bg-amber-500 w-[24px] md:w-[32px] h-[90px] md:h-[120px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600">
-                            <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
+                    <div className="absolute top-0 bottom-0 left-0 w-[3px] md:w-[4px] bg-amber-500 z-[55] pointer-events-none">
+                        <div className="absolute top-[15%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center">
+                            <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
                                 Concept
                             </span>
                         </div>
@@ -136,26 +136,26 @@ export default function ExecutionMatrix() {
                     <AnimatePresence mode="wait">
                         <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0 pointer-events-none">
                             {/* Base Image (Rightmost - Phase 4) */}
-                            <Image priority src={PROCESS_PROJECTS[activeProcessProject].img4.url} alt={PROCESS_PROJECTS[activeProcessProject].img4.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, 1400px" />
+                            <Image priority src={PROCESS_PROJECTS[activeProcessProject].img4.url} alt={PROCESS_PROJECTS[activeProcessProject].img4.label} fill className="object-cover object-center opacity-90" sizes="100vw" />
 
                             {/* Image 3 clipped by slider 3 */}
                             <div className="absolute inset-0 z-10" style={{ clipPath: `inset(0 ${100 - slider3}% 0 0)` }}>
-                                <Image priority src={PROCESS_PROJECTS[activeProcessProject].img3.url} alt={PROCESS_PROJECTS[activeProcessProject].img3.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, 1400px" />
+                                <Image priority src={PROCESS_PROJECTS[activeProcessProject].img3.url} alt={PROCESS_PROJECTS[activeProcessProject].img3.label} fill className="object-cover object-center opacity-90" sizes="100vw" />
                             </div>
 
                             {/* Image 2 clipped by slider 2 */}
                             <div className="absolute inset-0 z-20" style={{ clipPath: `inset(0 ${100 - slider2}% 0 0)` }}>
-                                <Image priority src={PROCESS_PROJECTS[activeProcessProject].img2.url} alt={PROCESS_PROJECTS[activeProcessProject].img2.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, 1400px" />
+                                <Image priority src={PROCESS_PROJECTS[activeProcessProject].img2.url} alt={PROCESS_PROJECTS[activeProcessProject].img2.label} fill className="object-cover object-center opacity-90" sizes="100vw" />
                             </div>
 
                             {/* Image 1 clipped by slider 1 */}
                             <div className="absolute inset-0 z-30" style={{ clipPath: `inset(0 ${100 - slider1}% 0 0)` }}>
-                                <Image priority src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="(max-width: 768px) 100vw, 1400px" />
+                                <Image priority src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="100vw" />
                             </div>
 
-                            <div className="absolute inset-x-0 bottom-0 h-48 md:h-40 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-30" />
-                            <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-40 px-4">
-                                <h3 className="font-serif text-xl sm:text-2xl md:text-4xl text-white drop-shadow-lg">
+                            <div className="absolute inset-x-0 bottom-0 h-24 md:h-48 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-30" />
+                            <div className="absolute bottom-4 md:bottom-12 left-0 w-full text-center z-40 px-2 md:px-4">
+                                <h3 className="font-serif text-lg sm:text-2xl md:text-5xl text-white drop-shadow-lg leading-tight">
                                     {PROCESS_PROJECTS[activeProcessProject].title}
                                 </h3>
                             </div>
@@ -171,11 +171,10 @@ export default function ExecutionMatrix() {
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        {/* THE LINE */}
-                        <div className="w-[2px] h-full bg-white/60 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[3px]">
-                            {/* THE BOX (Flush to the right of the line) */}
-                            <div className="absolute top-[38%] -translate-y-1/2 left-full bg-amber-500 w-[24px] md:w-[32px] h-[90px] md:h-[120px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 border border-amber-600 pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
+                        {/* STATIC SOLID AMBER LINE */}
+                        <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
+                            <div className="absolute top-[38%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
                                     Layout
                                 </span>
                             </div>
@@ -191,11 +190,10 @@ export default function ExecutionMatrix() {
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        {/* THE LINE */}
-                        <div className="w-[2px] h-full bg-amber-500/80 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[3px]">
-                            {/* THE BOX (Flush to the right of the line) */}
-                            <div className="absolute top-[61%] -translate-y-1/2 left-full bg-amber-500 w-[24px] md:w-[32px] h-[90px] md:h-[120px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 border border-amber-600 pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
+                        {/* STATIC SOLID AMBER LINE */}
+                        <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
+                            <div className="absolute top-[61%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
                                     Model
                                 </span>
                             </div>
@@ -211,11 +209,10 @@ export default function ExecutionMatrix() {
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        {/* THE LINE */}
-                        <div className="w-[2px] h-full bg-white/60 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[3px]">
-                            {/* THE BOX (Flush to the right of the line) */}
-                            <div className="absolute top-[84%] -translate-y-1/2 left-full bg-amber-500 w-[24px] md:w-[32px] h-[90px] md:h-[120px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 border border-amber-600 pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
+                        {/* STATIC SOLID AMBER LINE */}
+                        <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
+                            <div className="absolute top-[84%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
                                     Realism
                                 </span>
                             </div>
@@ -223,8 +220,14 @@ export default function ExecutionMatrix() {
                     </div>
                 </div>
 
+                {/* MOBILE LANDSCAPE HINT */}
+                <div className="md:hidden portrait:flex landscape:hidden items-center justify-center gap-2.5 mt-5 text-neutral-500 animate-pulse">
+                    <Smartphone className="w-4 h-4 -rotate-90 transition-transform duration-1000" />
+                    <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Rotate device for landscape view</span>
+                </div>
+
                 {/* Bottom Navigation */}
-                <div className="flex justify-between items-center mt-6 md:mt-8 w-full max-w-md mx-auto px-4 sm:px-0">
+                <div className="flex justify-between items-center mt-6 md:mt-10 w-full max-w-md mx-auto px-4 sm:px-0">
                     <button
                         onClick={prevProcessProject}
                         className="py-3 px-3 -ml-3 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] flex items-center gap-1.5 group"
