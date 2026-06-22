@@ -124,10 +124,13 @@ export default function ExecutionMatrix() {
                     ref={sliderContainerRef}
                     className="relative w-full aspect-[16/9] bg-neutral-900 rounded-none border border-neutral-800 shadow-2xl select-none"
                 >
-                    {/* STATIC LINE & LABEL 1: CONCEPT (Pinned to Left Edge) */}
-                    <div className="absolute top-0 bottom-0 left-0 w-[3px] md:w-[4px] bg-amber-500 z-[55] pointer-events-none">
-                        <div className="absolute top-[15%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center">
-                            <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-white whitespace-nowrap font-mono select-none">
+                    {/* STATIC LINE & LABEL 1: CONCEPT (Pinned to Left Edge & TOP Corner) */}
+                    <div className="absolute top-0 bottom-0 left-0 w-[3px] md:w-[4px] bg-amber-500 z-[51] pointer-events-none">
+                        <div className={cn(
+                            "absolute top-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 transition-opacity duration-200",
+                            slider1 < 2 ? "opacity-0" : "opacity-100"
+                        )}>
+                            <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                 Concept
                             </span>
                         </div>
@@ -162,57 +165,60 @@ export default function ExecutionMatrix() {
                         </motion.div>
                     </AnimatePresence>
 
-                    {/* SLIDER 1 HANDLE (Layout) */}
+                    {/* SLIDER 1 HANDLE (Layout) - perfectly 1/3 down */}
                     <div
-                        className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-50 touch-none flex justify-center cursor-ew-resize group"
+                        className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-[52] touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider1}%` }}
                         onPointerDown={(e) => handlePointerDown(e, 1)}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        {/* STATIC SOLID AMBER LINE */}
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
-                            <div className="absolute top-[38%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-white whitespace-nowrap font-mono select-none">
+                            <div className={cn(
+                                "absolute top-[33.33%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
+                                (slider2 - slider1 < 2 && draggingSlider !== 1) ? "opacity-0" : "opacity-100"
+                            )}>
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Layout
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    {/* SLIDER 2 HANDLE (Model) */}
+                    {/* SLIDER 2 HANDLE (Model) - perfectly 2/3 down */}
                     <div
-                        className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-50 touch-none flex justify-center cursor-ew-resize group"
+                        className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-[53] touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider2}%` }}
                         onPointerDown={(e) => handlePointerDown(e, 2)}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        {/* STATIC SOLID AMBER LINE */}
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
-                            <div className="absolute top-[61%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-white whitespace-nowrap font-mono select-none">
+                            <div className={cn(
+                                "absolute top-[66.66%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
+                                (slider3 - slider2 < 2 && draggingSlider !== 2) ? "opacity-0" : "opacity-100"
+                            )}>
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Model
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    {/* SLIDER 3 HANDLE (Realism) */}
+                    {/* SLIDER 3 HANDLE (Realism) - Pinned to BOTTOM Corner, fully movable left/right */}
                     <div
-                        className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-50 touch-none flex justify-center cursor-ew-resize group"
+                        className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-[54] touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider3}%` }}
                         onPointerDown={(e) => handlePointerDown(e, 3)}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        {/* STATIC SOLID AMBER LINE */}
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
-                            <div className="absolute top-[84%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-white whitespace-nowrap font-mono select-none">
+                            <div className="absolute bottom-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Realism
                                 </span>
                             </div>
@@ -226,15 +232,15 @@ export default function ExecutionMatrix() {
                     <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Rotate device for landscape view</span>
                 </div>
 
-                {/* Bottom Navigation with Thick Borders & Thick Arrows */}
+                {/* Bottom Navigation matching Phase Boxes perfectly */}
                 <div className="flex justify-between items-center mt-8 md:mt-12 w-full max-w-4xl mx-auto px-4 sm:px-0">
                     <button
                         onClick={prevProcessProject}
-                        className="group flex items-center justify-center gap-2 md:gap-4 px-5 py-3 md:px-8 md:py-4 border-[3px] md:border-[4px] border-neutral-800 bg-neutral-900/50 hover:bg-neutral-900 hover:border-amber-500 text-neutral-400 hover:text-amber-500 transition-all duration-300 font-sans text-[9px] md:text-[11px] font-bold uppercase tracking-[0.2em] rounded-none"
+                        className="group flex items-center justify-center gap-1.5 md:gap-2 w-[65px] md:w-[100px] h-[24px] md:h-[32px] border border-amber-600 bg-amber-500 hover:bg-amber-400 text-white transition-all duration-300 font-sans text-[8px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                         aria-label="Previous Project"
                     >
-                        <ArrowLeft strokeWidth={3} className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1.5 transition-transform" />
-                        <span className="hidden sm:inline">Previous</span>
+                        <ArrowLeft strokeWidth={3} className="w-3 h-3 md:w-4 md:h-4 group-hover:-translate-x-1 transition-transform" />
+                        <span className="hidden sm:inline">Prev</span>
                     </button>
 
                     <div className="flex gap-3 md:gap-4">
@@ -250,11 +256,11 @@ export default function ExecutionMatrix() {
 
                     <button
                         onClick={nextProcessProject}
-                        className="group flex items-center justify-center gap-2 md:gap-4 px-5 py-3 md:px-8 md:py-4 border-[3px] md:border-[4px] border-neutral-800 bg-neutral-900/50 hover:bg-neutral-900 hover:border-amber-500 text-neutral-400 hover:text-amber-500 transition-all duration-300 font-sans text-[9px] md:text-[11px] font-bold uppercase tracking-[0.2em] rounded-none"
+                        className="group flex items-center justify-center gap-1.5 md:gap-2 w-[65px] md:w-[100px] h-[24px] md:h-[32px] border border-amber-600 bg-amber-500 hover:bg-amber-400 text-white transition-all duration-300 font-sans text-[8px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                         aria-label="Next Project"
                     >
                         <span className="hidden sm:inline">Next</span>
-                        <ArrowRight strokeWidth={3} className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1.5 transition-transform" />
+                        <ArrowRight strokeWidth={3} className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
                     </button>
                 </div>
             </div>
