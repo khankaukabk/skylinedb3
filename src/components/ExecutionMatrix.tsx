@@ -128,7 +128,7 @@ export default function ExecutionMatrix() {
                     <div className="absolute top-0 bottom-0 left-0 w-[3px] md:w-[4px] bg-amber-500 z-[51] pointer-events-none">
                         <div className={cn(
                             "absolute top-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 transition-opacity duration-200",
-                            slider1 < 2 ? "opacity-0" : "opacity-100"
+                            slider1 < 5 ? "opacity-0" : "opacity-100"
                         )}>
                             <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                 Concept
@@ -175,9 +175,10 @@ export default function ExecutionMatrix() {
                         onPointerCancel={handlePointerUp}
                     >
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
+                            {/* Hides if hit by Slider 2 AND on the left side of the screen */}
                             <div className={cn(
                                 "absolute top-[33.33%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
-                                (slider2 - slider1 < 2 && draggingSlider !== 1) ? "opacity-0" : "opacity-100"
+                                (slider2 - slider1 < 2 && slider1 < 50) ? "opacity-0" : "opacity-100"
                             )}>
                                 <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Layout
@@ -196,9 +197,10 @@ export default function ExecutionMatrix() {
                         onPointerCancel={handlePointerUp}
                     >
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
+                            {/* Hides if hit by Slider 3 AND on the left side of the screen */}
                             <div className={cn(
                                 "absolute top-[66.66%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
-                                (slider3 - slider2 < 2 && draggingSlider !== 2) ? "opacity-0" : "opacity-100"
+                                (slider3 - slider2 < 2 && slider2 < 50) ? "opacity-0" : "opacity-100"
                             )}>
                                 <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Model
@@ -232,8 +234,8 @@ export default function ExecutionMatrix() {
                     <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Rotate device for landscape view</span>
                 </div>
 
-                {/* Bottom Navigation matching Phase Boxes perfectly */}
-                <div className="flex justify-between items-center mt-8 md:mt-12 w-full max-w-4xl mx-auto px-4 sm:px-0">
+                {/* Bottom Navigation with Centered Max-Width */}
+                <div className="flex justify-between items-center mt-8 md:mt-12 w-full max-w-xl mx-auto px-4 sm:px-0">
                     <button
                         onClick={prevProcessProject}
                         className="group flex items-center justify-center gap-1.5 md:gap-2 w-[65px] md:w-[100px] h-[24px] md:h-[32px] border border-amber-600 bg-amber-500 hover:bg-amber-400 text-white transition-all duration-300 font-sans text-[8px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
