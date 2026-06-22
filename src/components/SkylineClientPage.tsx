@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, ArrowRight, MapPin, Building2, Home, Box, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, MapPin, X } from 'lucide-react';
 import Image from 'next/image';
 
 // --- COMPONENT IMPORTS ---
 import InteractiveShowroom from './InteractiveShowroom';
 import ExecutionMatrix from './ExecutionMatrix';
+import Services from './Services';
 
 // --- UTILITIES ---
 function cn(...classes: (string | undefined | null | false)[]) {
@@ -25,34 +26,6 @@ const HERO_SLIDES = [
     { id: 1, image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop", title: "Foundry55: Industrial Living", description: "Master-planned residential sector. Integrated architectural engineering guaranteeing structural vision and ROI integrity from foundation to occupancy." },
     { id: 2, image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2500&auto=format&fit=crop", title: "The Apex Commercial Hub", description: "A structural monolith designed for immediate market readiness, minimizing operational friction for premium corporate tenants." },
     { id: 3, image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2500&auto=format&fit=crop", title: "Lumina Cultural Center", description: "Civic architecture engineered to anchor community development while maintaining strict fiscal parameters and maximum spatial yield." }
-];
-
-// UPDATED SERVICES WITH BACKGROUND IMAGES
-const SERVICES = [
-    {
-        title: "Land Planning",
-        icon: <MapPin className="w-6 h-6 stroke-[1.2]" />,
-        description: "Strategic terrain evaluation and zoning optimization designed to guarantee maximum parcel yield and regulatory compliance.",
-        bgImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop"
-    },
-    {
-        title: "Masterplanning",
-        icon: <Building2 className="w-6 h-6 stroke-[1.2]" />,
-        description: "Comprehensive urban and sector frameworks seamlessly integrating infrastructure, commerce, and public transit corridors.",
-        bgImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop"
-    },
-    {
-        title: "Community Development",
-        icon: <Home className="w-6 h-6 stroke-[1.2]" />,
-        description: "Scalable residential living solutions balancing high-density fiscal requirements with premium spatial quality.",
-        bgImage: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop"
-    },
-    {
-        title: "3D Visualization",
-        icon: <Box className="w-6 h-6 stroke-[1.2]" />,
-        description: "Photorealistic spatial rendering and real-time structural interaction, allowing exact verification prior to execution.",
-        bgImage: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop"
-    }
 ];
 
 const MessageBubbleIcon = ({ className }: { className?: string }) => (
@@ -183,60 +156,10 @@ export default function SkylineClientPage() {
                 </div>
             </section>
 
+            {/* THREE BESPOKE ARCHITECTURAL MODULES */}
             <InteractiveShowroom />
             <ExecutionMatrix />
-
-            {/* LUXURY EDITORIAL SERVICES SECTION */}
-            <section id="services" className="py-24 md:py-40 px-5 md:px-12 bg-[#F9F9F7] border-t border-neutral-200">
-                <div className="max-w-[1400px] mx-auto">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-24">
-                        <div className="text-left">
-                            <span className="text-amber-800 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
-                                Services Overview
-                            </span>
-                            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tight">
-                                Architectural Services.
-                            </h2>
-                        </div>
-                        <p className="text-neutral-500 font-light text-sm md:text-base max-w-md border-l border-amber-900/20 pl-5 md:pl-8 font-sans">
-                            We engineer certainty across every phase of development, from initial parcel acquisition to final spatial execution.
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                        {SERVICES.map((service, idx) => (
-                            <div key={idx} className="group relative h-[350px] md:h-[450px] bg-neutral-950 overflow-hidden flex flex-col justify-between p-8 cursor-default rounded-sm">
-
-                                <div className="absolute inset-0 z-0">
-                                    <Image
-                                        src={service.bgImage}
-                                        alt={service.title}
-                                        fill
-                                        className="object-cover opacity-0 group-hover:opacity-40 transition-opacity duration-700 ease-in-out scale-105 group-hover:scale-100"
-                                        sizes="(max-width: 768px) 100vw, 25vw"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90" />
-                                </div>
-
-                                <div className="relative z-10 w-12 h-12 border border-white/10 rounded-full flex items-center justify-center text-white/50 group-hover:bg-amber-500 group-hover:text-neutral-950 group-hover:border-amber-500 transition-colors duration-500">
-                                    {service.icon}
-                                </div>
-
-                                <div className="relative z-10 transform md:translate-y-12 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                                    <h3 className="font-serif text-2xl md:text-3xl text-white mb-3 md:mb-4 group-hover:text-amber-400 transition-colors duration-300">
-                                        {service.title}
-                                    </h3>
-                                    <p className="text-neutral-300 text-xs md:text-sm font-light leading-relaxed font-sans md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                                        {service.description}
-                                    </p>
-                                </div>
-
-                                <div className="absolute bottom-0 left-0 h-[2px] bg-amber-500 w-0 group-hover:w-full transition-all duration-700 ease-out z-10" />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            <Services />
 
             <section id="about" className="py-16 md:py-40 px-5 md:px-12 bg-white border-t border-neutral-200 relative">
                 <div className="max-w-[1400px] mx-auto">

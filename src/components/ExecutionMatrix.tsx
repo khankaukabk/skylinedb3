@@ -105,26 +105,30 @@ export default function ExecutionMatrix() {
                     <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight mb-6">
                         Vision to Reality.
                     </h2>
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeProcessProject}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                            className="px-5 py-3 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border border-amber-500 bg-amber-500/10 text-amber-400 rounded-none font-sans text-center whitespace-nowrap shadow-[0_0_15px_rgba(245,158,11,0.1)]"
-                        >
-                            {PROCESS_PROJECTS[activeProcessProject].category}
-                        </motion.div>
-                    </AnimatePresence>
+
+                    {/* ENLARGED CATEGORY BOX MATCHING SLIDER DEPTH */}
+                    <div className="w-full max-w-xl px-4 sm:px-0">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={activeProcessProject}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                                className="w-full py-3 sm:py-4 md:py-5 text-[9px] sm:text-[11px] md:text-sm font-bold uppercase tracking-[0.2em] md:tracking-[0.3em] border border-amber-500 bg-amber-500/10 text-amber-400 rounded-none font-sans text-center shadow-[0_0_20px_rgba(245,158,11,0.1)] whitespace-nowrap overflow-hidden text-ellipsis"
+                            >
+                                {PROCESS_PROJECTS[activeProcessProject].category}
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
                 </div>
 
-                {/* FULL WIDTH 16:9 SLIDER CONTAINER */}
+                {/* ADAPTIVE CONTAINER: 4:3 on mobile portrait, 16:9 on desktop/landscape */}
                 <div
                     ref={sliderContainerRef}
-                    className="relative w-full aspect-[16/9] bg-neutral-900 rounded-none border border-neutral-800 shadow-2xl select-none"
+                    className="relative w-full aspect-[4/3] md:aspect-[16/9] bg-neutral-900 rounded-none border border-neutral-800 shadow-2xl select-none"
                 >
-                    {/* STATIC LINE & LABEL 1: CONCEPT (Pinned to Left Edge & TOP Corner) */}
+                    {/* STATIC LINE & LABEL 1: CONCEPT */}
                     <div className="absolute top-0 bottom-0 left-0 w-[3px] md:w-[4px] bg-amber-500 z-[51] pointer-events-none">
                         <div className={cn(
                             "absolute top-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 transition-opacity duration-200",
@@ -156,16 +160,16 @@ export default function ExecutionMatrix() {
                                 <Image priority src={PROCESS_PROJECTS[activeProcessProject].img1.url} alt={PROCESS_PROJECTS[activeProcessProject].img1.label} fill className="object-cover object-center opacity-90" sizes="100vw" />
                             </div>
 
-                            <div className="absolute inset-x-0 bottom-0 h-24 md:h-48 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-30" />
+                            <div className="absolute inset-x-0 bottom-0 h-32 md:h-48 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-30" />
                             <div className="absolute bottom-4 md:bottom-12 left-0 w-full text-center z-40 px-2 md:px-4">
-                                <h3 className="font-serif text-lg sm:text-2xl md:text-5xl text-white drop-shadow-lg leading-tight">
+                                <h3 className="font-serif text-xl sm:text-2xl md:text-5xl text-white drop-shadow-lg leading-tight">
                                     {PROCESS_PROJECTS[activeProcessProject].title}
                                 </h3>
                             </div>
                         </motion.div>
                     </AnimatePresence>
 
-                    {/* SLIDER 1 HANDLE (Layout) - perfectly 1/3 down */}
+                    {/* SLIDER 1 HANDLE (Layout) */}
                     <div
                         className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-[52] touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider1}%` }}
@@ -175,7 +179,6 @@ export default function ExecutionMatrix() {
                         onPointerCancel={handlePointerUp}
                     >
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
-                            {/* Hides if hit by Slider 2 AND on the left side of the screen */}
                             <div className={cn(
                                 "absolute top-[33.33%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
                                 (slider2 - slider1 < 2 && slider1 < 50) ? "opacity-0" : "opacity-100"
@@ -187,7 +190,7 @@ export default function ExecutionMatrix() {
                         </div>
                     </div>
 
-                    {/* SLIDER 2 HANDLE (Model) - perfectly 2/3 down */}
+                    {/* SLIDER 2 HANDLE (Model) */}
                     <div
                         className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-[53] touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider2}%` }}
@@ -197,7 +200,6 @@ export default function ExecutionMatrix() {
                         onPointerCancel={handlePointerUp}
                     >
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
-                            {/* Hides if hit by Slider 3 AND on the left side of the screen */}
                             <div className={cn(
                                 "absolute top-[66.66%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
                                 (slider3 - slider2 < 2 && slider2 < 50) ? "opacity-0" : "opacity-100"
@@ -209,7 +211,7 @@ export default function ExecutionMatrix() {
                         </div>
                     </div>
 
-                    {/* SLIDER 3 HANDLE (Realism) - Pinned to BOTTOM Corner, fully movable left/right */}
+                    {/* SLIDER 3 HANDLE (Realism) */}
                     <div
                         className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-[54] touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider3}%` }}
@@ -234,7 +236,7 @@ export default function ExecutionMatrix() {
                     <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Rotate device for landscape view</span>
                 </div>
 
-                {/* Bottom Navigation with Centered Max-Width */}
+                {/* Bottom Navigation */}
                 <div className="flex justify-between items-center mt-8 md:mt-12 w-full max-w-xl mx-auto px-4 sm:px-0">
                     <button
                         onClick={prevProcessProject}
