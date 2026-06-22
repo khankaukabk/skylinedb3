@@ -122,19 +122,19 @@ export default function ExecutionMatrix() {
                 {/* FULL WIDTH 16:9 SLIDER CONTAINER */}
                 <div
                     ref={sliderContainerRef}
-                    className="relative w-full aspect-[16/9] bg-neutral-900 rounded-none overflow-hidden border border-neutral-800 shadow-2xl select-none"
+                    className="relative w-full aspect-[16/9] bg-neutral-900 rounded-none border border-neutral-800 shadow-2xl select-none"
                 >
                     {/* STATIC LINE & LABEL 1: CONCEPT (Pinned to Left Edge) */}
                     <div className="absolute top-0 bottom-0 left-0 w-[3px] md:w-[4px] bg-amber-500 z-[55] pointer-events-none">
                         <div className="absolute top-[15%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center">
-                            <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
+                            <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-white whitespace-nowrap font-mono select-none">
                                 Concept
                             </span>
                         </div>
                     </div>
 
                     <AnimatePresence mode="wait">
-                        <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0 pointer-events-none">
+                        <motion.div key={activeProcessProject} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="absolute inset-0 pointer-events-none overflow-hidden">
                             {/* Base Image (Rightmost - Phase 4) */}
                             <Image priority src={PROCESS_PROJECTS[activeProcessProject].img4.url} alt={PROCESS_PROJECTS[activeProcessProject].img4.label} fill className="object-cover object-center opacity-90" sizes="100vw" />
 
@@ -174,7 +174,7 @@ export default function ExecutionMatrix() {
                         {/* STATIC SOLID AMBER LINE */}
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
                             <div className="absolute top-[38%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Layout
                                 </span>
                             </div>
@@ -193,7 +193,7 @@ export default function ExecutionMatrix() {
                         {/* STATIC SOLID AMBER LINE */}
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
                             <div className="absolute top-[61%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Model
                                 </span>
                             </div>
@@ -212,7 +212,7 @@ export default function ExecutionMatrix() {
                         {/* STATIC SOLID AMBER LINE */}
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
                             <div className="absolute top-[84%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[45px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[7px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Realism
                                 </span>
                             </div>
@@ -226,14 +226,14 @@ export default function ExecutionMatrix() {
                     <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Rotate device for landscape view</span>
                 </div>
 
-                {/* --- UPDATED LUXURY BOTTOM NAVIGATION --- */}
+                {/* Bottom Navigation with Thick Borders & Thick Arrows */}
                 <div className="flex justify-between items-center mt-8 md:mt-12 w-full max-w-4xl mx-auto px-4 sm:px-0">
                     <button
                         onClick={prevProcessProject}
-                        className="group flex items-center justify-center gap-2 md:gap-4 px-5 py-3 md:px-8 md:py-4 border border-neutral-800 bg-neutral-900/50 hover:bg-neutral-900 hover:border-amber-500 text-neutral-400 hover:text-amber-500 transition-all duration-300 font-sans text-[9px] md:text-[11px] font-bold uppercase tracking-[0.2em] rounded-none"
+                        className="group flex items-center justify-center gap-2 md:gap-4 px-5 py-3 md:px-8 md:py-4 border-[3px] md:border-[4px] border-neutral-800 bg-neutral-900/50 hover:bg-neutral-900 hover:border-amber-500 text-neutral-400 hover:text-amber-500 transition-all duration-300 font-sans text-[9px] md:text-[11px] font-bold uppercase tracking-[0.2em] rounded-none"
                         aria-label="Previous Project"
                     >
-                        <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1.5 transition-transform" />
+                        <ArrowLeft strokeWidth={3} className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1.5 transition-transform" />
                         <span className="hidden sm:inline">Previous</span>
                     </button>
 
@@ -250,11 +250,11 @@ export default function ExecutionMatrix() {
 
                     <button
                         onClick={nextProcessProject}
-                        className="group flex items-center justify-center gap-2 md:gap-4 px-5 py-3 md:px-8 md:py-4 border border-neutral-800 bg-neutral-900/50 hover:bg-neutral-900 hover:border-amber-500 text-neutral-400 hover:text-amber-500 transition-all duration-300 font-sans text-[9px] md:text-[11px] font-bold uppercase tracking-[0.2em] rounded-none"
+                        className="group flex items-center justify-center gap-2 md:gap-4 px-5 py-3 md:px-8 md:py-4 border-[3px] md:border-[4px] border-neutral-800 bg-neutral-900/50 hover:bg-neutral-900 hover:border-amber-500 text-neutral-400 hover:text-amber-500 transition-all duration-300 font-sans text-[9px] md:text-[11px] font-bold uppercase tracking-[0.2em] rounded-none"
                         aria-label="Next Project"
                     >
                         <span className="hidden sm:inline">Next</span>
-                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1.5 transition-transform" />
+                        <ArrowRight strokeWidth={3} className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1.5 transition-transform" />
                     </button>
                 </div>
             </div>
