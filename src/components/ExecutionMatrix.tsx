@@ -226,23 +226,23 @@ export default function ExecutionMatrix() {
                     <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Rotate device for landscape view</span>
                 </div>
 
-                {/* Bottom Navigation */}
-                <div className="flex justify-between items-center mt-6 md:mt-10 w-full max-w-md mx-auto px-4 sm:px-0">
+                {/* --- UPDATED LUXURY BOTTOM NAVIGATION --- */}
+                <div className="flex justify-between items-center mt-8 md:mt-12 w-full max-w-4xl mx-auto px-4 sm:px-0">
                     <button
                         onClick={prevProcessProject}
-                        className="py-3 px-3 -ml-3 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] flex items-center gap-1.5 group"
-                        aria-label="Previous Category"
+                        className="group flex items-center justify-center gap-2 md:gap-4 px-5 py-3 md:px-8 md:py-4 border border-neutral-800 bg-neutral-900/50 hover:bg-neutral-900 hover:border-amber-500 text-neutral-400 hover:text-amber-500 transition-all duration-300 font-sans text-[9px] md:text-[11px] font-bold uppercase tracking-[0.2em] rounded-none"
+                        aria-label="Previous Project"
                     >
-                        <ArrowLeft className="w-3 h-3 md:w-4 md:h-4 group-hover:-translate-x-1 transition-transform" />
-                        <span className="hidden sm:inline">PREV</span>
+                        <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1.5 transition-transform" />
+                        <span className="hidden sm:inline">Previous</span>
                     </button>
 
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 md:gap-4">
                         {PROCESS_PROJECTS.map((_, idx) => (
                             <button
                                 key={idx}
                                 onClick={() => { setActiveProcessProject(idx); setSlider1(25); setSlider2(50); setSlider3(75); }}
-                                className={cn("h-1.5 rounded-none transition-all duration-300", activeProcessProject === idx ? "w-8 bg-amber-500" : "w-2 bg-neutral-700 hover:bg-neutral-500")}
+                                className={cn("h-1.5 md:h-2 rounded-none transition-all duration-300", activeProcessProject === idx ? "w-8 md:w-12 bg-amber-500" : "w-2 md:w-3 bg-neutral-700 hover:bg-neutral-500")}
                                 aria-label={`Go to project ${idx + 1}`}
                             />
                         ))}
@@ -250,11 +250,11 @@ export default function ExecutionMatrix() {
 
                     <button
                         onClick={nextProcessProject}
-                        className="py-3 px-3 -mr-3 text-neutral-500 hover:text-amber-500 transition-colors text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] flex items-center gap-1.5 group"
-                        aria-label="Next Category"
+                        className="group flex items-center justify-center gap-2 md:gap-4 px-5 py-3 md:px-8 md:py-4 border border-neutral-800 bg-neutral-900/50 hover:bg-neutral-900 hover:border-amber-500 text-neutral-400 hover:text-amber-500 transition-all duration-300 font-sans text-[9px] md:text-[11px] font-bold uppercase tracking-[0.2em] rounded-none"
+                        aria-label="Next Project"
                     >
-                        <span className="hidden sm:inline">NEXT</span>
-                        <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+                        <span className="hidden sm:inline">Next</span>
+                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1.5 transition-transform" />
                     </button>
                 </div>
             </div>
