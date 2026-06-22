@@ -27,11 +27,32 @@ const HERO_SLIDES = [
     { id: 3, image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2500&auto=format&fit=crop", title: "Lumina Cultural Center", description: "Civic architecture engineered to anchor community development while maintaining strict fiscal parameters and maximum spatial yield." }
 ];
 
+// UPDATED SERVICES WITH BACKGROUND IMAGES
 const SERVICES = [
-    { title: "Land Planning", icon: <MapPin className="w-6 h-6 stroke-[1.2]" />, description: "Strategic terrain evaluation and zoning optimization designed to guarantee maximum parcel yield and regulatory compliance." },
-    { title: "Masterplanning", icon: <Building2 className="w-6 h-6 stroke-[1.2]" />, description: "Comprehensive urban and sector frameworks seamlessly integrating infrastructure, commerce, and public transit corridors." },
-    { title: "Community Development", icon: <Home className="w-6 h-6 stroke-[1.2]" />, description: "Scalable residential living solutions balancing high-density fiscal requirements with premium spatial quality." },
-    { title: "3D Visualization", icon: <Box className="w-6 h-6 stroke-[1.2]" />, description: "Photorealistic spatial rendering and real-time structural interaction, allowing exact verification prior to execution." }
+    {
+        title: "Land Planning",
+        icon: <MapPin className="w-6 h-6 stroke-[1.2]" />,
+        description: "Strategic terrain evaluation and zoning optimization designed to guarantee maximum parcel yield and regulatory compliance.",
+        bgImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop"
+    },
+    {
+        title: "Masterplanning",
+        icon: <Building2 className="w-6 h-6 stroke-[1.2]" />,
+        description: "Comprehensive urban and sector frameworks seamlessly integrating infrastructure, commerce, and public transit corridors.",
+        bgImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop"
+    },
+    {
+        title: "Community Development",
+        icon: <Home className="w-6 h-6 stroke-[1.2]" />,
+        description: "Scalable residential living solutions balancing high-density fiscal requirements with premium spatial quality.",
+        bgImage: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop"
+    },
+    {
+        title: "3D Visualization",
+        icon: <Box className="w-6 h-6 stroke-[1.2]" />,
+        description: "Photorealistic spatial rendering and real-time structural interaction, allowing exact verification prior to execution.",
+        bgImage: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop"
+    }
 ];
 
 const MessageBubbleIcon = ({ className }: { className?: string }) => (
@@ -165,20 +186,52 @@ export default function SkylineClientPage() {
             <InteractiveShowroom />
             <ExecutionMatrix />
 
-            <section id="services" className="py-16 md:py-40 px-5 md:px-12 bg-[#F4F4F2] border-t border-neutral-200">
+            {/* LUXURY EDITORIAL SERVICES SECTION */}
+            <section id="services" className="py-24 md:py-40 px-5 md:px-12 bg-[#F9F9F7] border-t border-neutral-200">
                 <div className="max-w-[1400px] mx-auto">
-                    <div className="text-left md:text-center mb-10 md:mb-24">
-                        <span className="text-amber-800 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">Services Overview</span>
-                        <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tight">Architectural Services.</h2>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-24">
+                        <div className="text-left">
+                            <span className="text-amber-800 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
+                                Services Overview
+                            </span>
+                            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tight">
+                                Architectural Services.
+                            </h2>
+                        </div>
+                        <p className="text-neutral-500 font-light text-sm md:text-base max-w-md border-l border-amber-900/20 pl-5 md:pl-8 font-sans">
+                            We engineer certainty across every phase of development, from initial parcel acquisition to final spatial execution.
+                        </p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         {SERVICES.map((service, idx) => (
-                            <div key={idx} className="group bg-white border border-neutral-200 p-6 md:p-8 hover:border-amber-900/30 transition-all duration-500 flex flex-col h-full rounded-sm">
-                                <div className="w-10 h-10 md:w-12 md:h-12 bg-[#F9F9F7] border border-neutral-200 rounded-sm flex items-center justify-center text-amber-800 mb-6 md:mb-8 group-hover:scale-110 group-hover:bg-amber-50 transition-all duration-500">
+                            <div key={idx} className="group relative h-[350px] md:h-[450px] bg-neutral-950 overflow-hidden flex flex-col justify-between p-8 cursor-default rounded-sm">
+
+                                <div className="absolute inset-0 z-0">
+                                    <Image
+                                        src={service.bgImage}
+                                        alt={service.title}
+                                        fill
+                                        className="object-cover opacity-0 group-hover:opacity-40 transition-opacity duration-700 ease-in-out scale-105 group-hover:scale-100"
+                                        sizes="(max-width: 768px) 100vw, 25vw"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90" />
+                                </div>
+
+                                <div className="relative z-10 w-12 h-12 border border-white/10 rounded-full flex items-center justify-center text-white/50 group-hover:bg-amber-500 group-hover:text-neutral-950 group-hover:border-amber-500 transition-colors duration-500">
                                     {service.icon}
                                 </div>
-                                <h3 className="font-serif text-lg md:text-2xl text-neutral-900 mb-3 md:mb-4 group-hover:text-amber-900 transition-colors">{service.title}</h3>
-                                <p className="text-neutral-500 text-xs md:text-sm font-light leading-relaxed font-sans flex-grow">{service.description}</p>
+
+                                <div className="relative z-10 transform md:translate-y-12 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                                    <h3 className="font-serif text-2xl md:text-3xl text-white mb-3 md:mb-4 group-hover:text-amber-400 transition-colors duration-300">
+                                        {service.title}
+                                    </h3>
+                                    <p className="text-neutral-300 text-xs md:text-sm font-light leading-relaxed font-sans md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                                        {service.description}
+                                    </p>
+                                </div>
+
+                                <div className="absolute bottom-0 left-0 h-[2px] bg-amber-500 w-0 group-hover:w-full transition-all duration-700 ease-out z-10" />
                             </div>
                         ))}
                     </div>
@@ -219,7 +272,6 @@ export default function SkylineClientPage() {
                         </a>
                     </div>
 
-                    {/* RESTORED FOOTER BOTTOM SECTION */}
                     <div className="mt-16 md:mt-24 pt-8 md:pt-12 border-t border-neutral-200 text-neutral-400 space-y-5 font-sans">
                         <div className="flex items-center justify-center gap-1.5 md:gap-2 text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.3em]">
                             <MapPin className="w-3 h-3 md:w-3.5 md:h-3.5 text-neutral-600 shrink-0" />

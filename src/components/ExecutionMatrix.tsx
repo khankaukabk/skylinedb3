@@ -112,22 +112,22 @@ export default function ExecutionMatrix() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
-                            className="px-5 py-3 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border border-amber-500 bg-amber-500/10 text-amber-400 rounded-sm font-sans text-center whitespace-nowrap shadow-[0_0_15px_rgba(245,158,11,0.1)]"
+                            className="px-5 py-3 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] border border-amber-500 bg-amber-500/10 text-amber-400 rounded-none font-sans text-center whitespace-nowrap shadow-[0_0_15px_rgba(245,158,11,0.1)]"
                         >
                             {PROCESS_PROJECTS[activeProcessProject].category}
                         </motion.div>
                     </AnimatePresence>
                 </div>
 
-                {/* 4-Phase Slider Container */}
+                {/* 4-Phase Slider Container - FORCED LANDSCAPE RATIO FOR MOBILE & DESKTOP */}
                 <div
                     ref={sliderContainerRef}
-                    className="relative w-full aspect-[3/4] min-h-[450px] sm:aspect-square md:min-h-0 md:aspect-[21/9] bg-neutral-900 rounded-sm overflow-hidden border border-neutral-800 shadow-2xl select-none"
+                    className="relative w-full aspect-[16/9] md:aspect-[21/9] bg-neutral-900 rounded-none overflow-hidden border border-neutral-800 shadow-2xl select-none"
                 >
                     {/* STATIC LINE & LABEL 1: CONCEPT (Pinned to Left Edge) */}
                     <div className="absolute top-0 bottom-0 left-0 w-[1px] bg-white/30 z-[55] pointer-events-none">
-                        <div className="absolute top-[12%] left-0 ml-[2px] md:ml-1 -translate-y-1/2 bg-amber-500 px-1.5 md:px-2 py-4 md:py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600/50">
-                            <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap font-mono select-none">
+                        <div className="absolute top-[15%] -translate-y-1/2 left-0 bg-amber-500 w-[24px] md:w-[32px] h-[90px] md:h-[120px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600">
+                            <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
                                 Concept
                             </span>
                         </div>
@@ -155,7 +155,7 @@ export default function ExecutionMatrix() {
 
                             <div className="absolute inset-x-0 bottom-0 h-48 md:h-40 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-30" />
                             <div className="absolute bottom-6 md:bottom-10 left-0 w-full text-center z-40 px-4">
-                                <h3 className="font-serif text-2xl md:text-4xl text-white drop-shadow-lg">
+                                <h3 className="font-serif text-xl sm:text-2xl md:text-4xl text-white drop-shadow-lg">
                                     {PROCESS_PROJECTS[activeProcessProject].title}
                                 </h3>
                             </div>
@@ -164,34 +164,38 @@ export default function ExecutionMatrix() {
 
                     {/* SLIDER 1 HANDLE (Layout) */}
                     <div
-                        className="absolute top-0 bottom-0 w-12 -ml-6 md:w-8 md:-ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
+                        className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-50 touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider1}%` }}
                         onPointerDown={(e) => handlePointerDown(e, 1)}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        <div className="w-[1px] h-full bg-white/40 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
-                            <div className="absolute top-[38%] left-full ml-[2px] md:ml-1 -translate-y-1/2 bg-amber-500 px-1.5 md:px-2 py-4 md:py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50 pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap font-mono select-none">
+                        {/* THE LINE */}
+                        <div className="w-[2px] h-full bg-white/60 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[3px]">
+                            {/* THE BOX (Flush to the right of the line) */}
+                            <div className="absolute top-[38%] -translate-y-1/2 left-full bg-amber-500 w-[24px] md:w-[32px] h-[90px] md:h-[120px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 border border-amber-600 pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
                                     Layout
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    {/* SLIDER 2 HANDLE (Model - Amber Highlight Line) */}
+                    {/* SLIDER 2 HANDLE (Model) */}
                     <div
-                        className="absolute top-0 bottom-0 w-12 -ml-6 md:w-8 md:-ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
+                        className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-50 touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider2}%` }}
                         onPointerDown={(e) => handlePointerDown(e, 2)}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        <div className="w-[1px] h-full bg-amber-500/60 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
-                            <div className="absolute top-[64%] left-full ml-[2px] md:ml-1 -translate-y-1/2 bg-amber-500 px-1.5 md:px-2 py-4 md:py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50 pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap font-mono select-none">
+                        {/* THE LINE */}
+                        <div className="w-[2px] h-full bg-amber-500/80 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[3px]">
+                            {/* THE BOX (Flush to the right of the line) */}
+                            <div className="absolute top-[61%] -translate-y-1/2 left-full bg-amber-500 w-[24px] md:w-[32px] h-[90px] md:h-[120px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 border border-amber-600 pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
                                     Model
                                 </span>
                             </div>
@@ -200,16 +204,18 @@ export default function ExecutionMatrix() {
 
                     {/* SLIDER 3 HANDLE (Realism) */}
                     <div
-                        className="absolute top-0 bottom-0 w-12 -ml-6 md:w-8 md:-ml-4 z-50 touch-none flex justify-center cursor-ew-resize group"
+                        className="absolute top-0 bottom-0 w-16 -ml-8 md:w-12 md:-ml-6 z-50 touch-none flex justify-center cursor-ew-resize group"
                         style={{ left: `${slider3}%` }}
                         onPointerDown={(e) => handlePointerDown(e, 3)}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerCancel={handlePointerUp}
                     >
-                        <div className="w-[1px] h-full bg-white/40 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[2px]">
-                            <div className="absolute top-[88%] left-full ml-[2px] md:ml-1 -translate-y-1/2 bg-amber-500 px-1.5 md:px-2 py-4 md:py-5 rounded-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 border border-amber-600/50 pointer-events-none">
-                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-bold text-neutral-950 whitespace-nowrap font-mono select-none">
+                        {/* THE LINE */}
+                        <div className="w-[2px] h-full bg-white/60 relative transition-all duration-300 group-hover:bg-amber-400 group-hover:w-[3px]">
+                            {/* THE BOX (Flush to the right of the line) */}
+                            <div className="absolute top-[84%] -translate-y-1/2 left-full bg-amber-500 w-[24px] md:w-[32px] h-[90px] md:h-[120px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform duration-300 border border-amber-600 pointer-events-none">
+                                <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-black text-neutral-950 whitespace-nowrap font-mono select-none">
                                     Realism
                                 </span>
                             </div>
@@ -233,7 +239,7 @@ export default function ExecutionMatrix() {
                             <button
                                 key={idx}
                                 onClick={() => { setActiveProcessProject(idx); setSlider1(25); setSlider2(50); setSlider3(75); }}
-                                className={cn("h-1.5 rounded-full transition-all duration-300", activeProcessProject === idx ? "w-8 bg-amber-500" : "w-2 bg-neutral-700 hover:bg-neutral-500")}
+                                className={cn("h-1.5 rounded-none transition-all duration-300", activeProcessProject === idx ? "w-8 bg-amber-500" : "w-2 bg-neutral-700 hover:bg-neutral-500")}
                                 aria-label={`Go to project ${idx + 1}`}
                             />
                         ))}
