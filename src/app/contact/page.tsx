@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, ArrowRight } from 'lucide-react';
+import { MapPin, Phone, Mail, ArrowRight, Loader2 } from 'lucide-react';
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -12,7 +12,7 @@ function cn(...classes: ClassValue[]) {
 
 // --- CONFIG ---
 const SUPPORT_NUMBER_FORMATTED = "(205) 235-1664";
-const SUPPORT_EMAIL = "skylinedb3.team@gmail.com";
+const SUPPORT_EMAIL = "info@skylinedb3.com";
 const ADDRESS = "3622 Central Ave, Memphis, TN";
 
 // --- CUSTOM SOCIAL ICONS ---
@@ -35,12 +35,42 @@ const SOCIAL_LINKS = [
 ];
 
 export default function Contact() {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('loading');
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      project_scope: formData.get('project_scope'),
+      message: formData.get('message'),
+    };
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    }
+  };
+
   return (
     <main
       className="flex flex-col lg:flex-row bg-[#F9F9F7] font-sans selection:bg-amber-100 selection:text-amber-900"
       style={{ minHeight: "100vh", paddingTop: "var(--nav-h, 80px)" }}
     >
-
       {/* LEFT SIDE: CONTACT INFO (DARK) */}
       <div className="w-full lg:w-5/12 bg-neutral-950 text-white px-6 py-16 md:px-12 md:py-20 lg:p-24 flex flex-col justify-between relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 border-r border-t border-white/5 opacity-50 translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none" />
@@ -116,43 +146,62 @@ export default function Contact() {
             </p>
           </div>
 
-          <form className="space-y-8 font-sans" onSubmit={(e) => e.preventDefault()}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="relative group">
-                <input type="text" id="name" required className="w-full bg-transparent border-b border-neutral-300 py-3 text-sm md:text-base text-neutral-900 focus:outline-none focus:border-amber-600 transition-colors peer placeholder-transparent" placeholder="Full Name" />
-                <label htmlFor="name" className="absolute left-0 top-3 text-neutral-400 text-xs md:text-sm font-light transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-amber-600 peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest">Full Name</label>
+          {status === 'success' ? (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-green-50 border border-green-200 p-8 rounded-sm text-center">
+              <h3 className="text-green-800 font-serif text-2xl mb-2">Transmission Successful</h3>
+              <p className="text-green-700 text-sm font-sans">Your blueprint has been received. Our advisory desk will be in contact shortly.</p>
+            </motion.div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-8 font-sans">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="relative group">
+                  <input type="text" id="name" name="name" required disabled={status === 'loading'} className="w-full bg-transparent border-b border-neutral-300 py-3 text-sm md:text-base text-neutral-900 focus:outline-none focus:border-amber-600 transition-colors peer placeholder-transparent disabled:opacity-50" placeholder="Full Name" />
+                  <label htmlFor="name" className="absolute left-0 top-3 text-neutral-400 text-xs md:text-sm font-light transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-amber-600 peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest">Full Name</label>
+                </div>
+
+                <div className="relative group">
+                  <input type="email" id="email" name="email" required disabled={status === 'loading'} className="w-full bg-transparent border-b border-neutral-300 py-3 text-sm md:text-base text-neutral-900 focus:outline-none focus:border-amber-600 transition-colors peer placeholder-transparent disabled:opacity-50" placeholder="Email Address" />
+                  <label htmlFor="email" className="absolute left-0 top-3 text-neutral-400 text-xs md:text-sm font-light transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-amber-600 peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest">Email Address</label>
+                </div>
               </div>
 
-              <div className="relative group">
-                <input type="email" id="email" required className="w-full bg-transparent border-b border-neutral-300 py-3 text-sm md:text-base text-neutral-900 focus:outline-none focus:border-amber-600 transition-colors peer placeholder-transparent" placeholder="Email Address" />
-                <label htmlFor="email" className="absolute left-0 top-3 text-neutral-400 text-xs md:text-sm font-light transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-amber-600 peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest">Email Address</label>
+              <div className="relative group pt-2">
+                <select id="type" name="project_scope" required disabled={status === 'loading'} className="w-full bg-transparent border-b border-neutral-300 py-3 text-sm md:text-base text-neutral-900 focus:outline-none focus:border-amber-600 transition-colors appearance-none cursor-pointer disabled:opacity-50" defaultValue="">
+                  <option value="" disabled hidden>Select Project Scope</option>
+                  <option value="residential">Residential Architecture</option>
+                  <option value="commercial">Commercial Real Estate</option>
+                  <option value="masterplan">Masterplan & Urban Design</option>
+                  <option value="other">Other / Consultation</option>
+                </select>
+                <div className="absolute right-0 top-4 pointer-events-none text-neutral-400">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
               </div>
-            </div>
 
-            <div className="relative group pt-2">
-              <select id="type" required className="w-full bg-transparent border-b border-neutral-300 py-3 text-sm md:text-base text-neutral-900 focus:outline-none focus:border-amber-600 transition-colors appearance-none cursor-pointer" defaultValue="">
-                <option value="" disabled hidden>Select Project Scope</option>
-                <option value="residential">Residential Architecture</option>
-                <option value="commercial">Commercial Real Estate</option>
-                <option value="masterplan">Masterplan & Urban Design</option>
-                <option value="other">Other / Consultation</option>
-              </select>
-              <div className="absolute right-0 top-4 pointer-events-none text-neutral-400">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+              <div className="relative group pt-4">
+                <textarea id="message" name="message" required rows={4} disabled={status === 'loading'} className="w-full bg-transparent border-b border-neutral-300 py-3 text-sm md:text-base text-neutral-900 focus:outline-none focus:border-amber-600 transition-colors peer placeholder-transparent resize-none disabled:opacity-50" placeholder="Project Details"></textarea>
+                <label htmlFor="message" className="absolute left-0 top-3 text-neutral-400 text-xs md:text-sm font-light transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-amber-600 peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest">Project Details & Objectives</label>
               </div>
-            </div>
 
-            <div className="relative group pt-4">
-              <textarea id="message" required rows={4} className="w-full bg-transparent border-b border-neutral-300 py-3 text-sm md:text-base text-neutral-900 focus:outline-none focus:border-amber-600 transition-colors peer placeholder-transparent resize-none" placeholder="Project Details"></textarea>
-              <label htmlFor="message" className="absolute left-0 top-3 text-neutral-400 text-xs md:text-sm font-light transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-amber-600 peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest peer-valid:-top-4 peer-valid:text-[10px] peer-valid:uppercase peer-valid:tracking-widest">Project Details & Objectives</label>
-            </div>
+              {status === 'error' && (
+                <p className="text-red-500 text-sm font-sans">An error occurred while transmitting your request. Please try again or email us directly.</p>
+              )}
 
-            <div className="pt-4">
-              <button type="submit" className="w-full md:w-auto inline-flex items-center justify-center border border-neutral-300 bg-white text-neutral-900 px-10 py-4 font-bold text-[10px] uppercase tracking-[0.25em] hover:border-amber-600 hover:text-amber-600 transition-all font-sans rounded-sm group shadow-sm hover:shadow-md">
-                Submit Blueprint <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          </form>
+              <div className="pt-4">
+                <button
+                  type="submit"
+                  disabled={status === 'loading'}
+                  className="w-full md:w-auto inline-flex items-center justify-center border border-neutral-300 bg-white text-neutral-900 px-10 py-4 font-bold text-[10px] uppercase tracking-[0.25em] hover:border-amber-600 hover:text-amber-600 transition-all font-sans rounded-sm group shadow-sm hover:shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {status === 'loading' ? (
+                    <><Loader2 className="w-4 h-4 mr-3 animate-spin" /> Transmitting...</>
+                  ) : (
+                    <>Submit Blueprint <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" /></>
+                  )}
+                </button>
+              </div>
+            </form>
+          )}
 
         </motion.div>
       </div>

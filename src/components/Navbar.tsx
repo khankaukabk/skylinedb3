@@ -21,7 +21,6 @@ const LOGO_URL =
 // Standard navigation links (Connect is handled separately as a button)
 const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Showroom", href: "/#showroom" },
   { label: "Process", href: "/#process" },
   { label: "Services", href: "/#services" },
   { label: "About", href: "/about" },
