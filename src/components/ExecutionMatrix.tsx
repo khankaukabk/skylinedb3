@@ -148,7 +148,7 @@ export default function ExecutionMatrix() {
                     {/* STATIC LINE & LABEL 1: CONCEPT */}
                     <div className="absolute top-0 bottom-0 left-0 w-[3px] md:w-[4px] bg-amber-500 z-[51] pointer-events-none">
                         <div className={cn(
-                            "absolute top-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 transition-opacity duration-200",
+                            "absolute top-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-opacity duration-200",
                             slider1 < 5 ? "opacity-0" : "opacity-100"
                         )}>
                             <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
@@ -193,7 +193,7 @@ export default function ExecutionMatrix() {
                     >
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
                             <div className={cn(
-                                "absolute top-[33.33%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
+                                "absolute top-[33.33%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none transition-opacity duration-200",
                                 (slider2 - slider1 < 2 && slider1 < 50) ? "opacity-0" : "opacity-100"
                             )}>
                                 <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
@@ -214,7 +214,7 @@ export default function ExecutionMatrix() {
                     >
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
                             <div className={cn(
-                                "absolute top-[66.66%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none transition-opacity duration-200",
+                                "absolute top-[66.66%] -translate-y-1/2 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none transition-opacity duration-200",
                                 (slider3 - slider2 < 2 && slider2 < 50) ? "opacity-0" : "opacity-100"
                             )}>
                                 <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
@@ -234,7 +234,7 @@ export default function ExecutionMatrix() {
                         onPointerCancel={handlePointerUp}
                     >
                         <div className="w-[3px] md:w-[4px] h-full bg-amber-500 relative">
-                            <div className="absolute bottom-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center border border-amber-600 pointer-events-none">
+                            <div className="absolute bottom-0 left-0 bg-amber-500 w-[18px] md:w-[32px] h-[75px] md:h-[100px] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none">
                                 <span className="[writing-mode:vertical-rl] rotate-180 text-[8px] md:text-[12px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black text-white whitespace-nowrap font-mono select-none">
                                     Realism
                                 </span>
@@ -257,7 +257,7 @@ export default function ExecutionMatrix() {
                 <div className="flex justify-between items-center mt-6 md:mt-12 w-full max-w-xl mx-auto px-4 sm:px-0">
                     <button
                         onClick={prevProcessProject}
-                        className="group flex items-center justify-center gap-1.5 md:gap-2 w-[65px] md:w-[100px] h-[24px] md:h-[32px] border border-amber-600 bg-amber-500 hover:bg-amber-400 text-white transition-all duration-300 font-sans text-[8px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+                        className="group flex items-center justify-center gap-1.5 md:gap-2 w-[65px] md:w-[100px] h-[24px] md:h-[32px] bg-amber-500 hover:bg-amber-400 text-white transition-all duration-300 font-sans text-[8px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                         aria-label="Previous Project"
                     >
                         <ArrowLeft strokeWidth={3} className="w-3 h-3 md:w-4 md:h-4 group-hover:-translate-x-1 transition-transform" />
@@ -277,7 +277,7 @@ export default function ExecutionMatrix() {
 
                     <button
                         onClick={nextProcessProject}
-                        className="group flex items-center justify-center gap-1.5 md:gap-2 w-[65px] md:w-[100px] h-[24px] md:h-[32px] border border-amber-600 bg-amber-500 hover:bg-amber-400 text-white transition-all duration-300 font-sans text-[8px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+                        className="group flex items-center justify-center gap-1.5 md:gap-2 w-[65px] md:w-[100px] h-[24px] md:h-[32px] bg-amber-500 hover:bg-amber-400 text-white transition-all duration-300 font-sans text-[8px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                         aria-label="Next Project"
                     >
                         <span className="hidden sm:inline">Next</span>

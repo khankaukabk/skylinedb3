@@ -1,229 +1,160 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Maximize, Box, Layout, Zap, Shield } from 'lucide-react';
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Box, Maximize, Shield, Zap, Check, Users } from 'lucide-react';
 
 // --- UTILITY ---
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-// --- ARCHITECTURAL SHOWROOM DATA ---
+// --- DATA ---
 const SHOWROOM_MODELS = [
     {
-        id: "modern-villa",
-        tabLabel: "Modern Villa",
+        id: "vertex-villa",
         title: "The Vertex Villa",
         description: "A high-efficiency luxury residential concept designed for optimal natural light and environmental integration.",
-        embedUrl: "https://sketchfab.com/models/YOUR_MODEL_ID_1/embed?autostart=0&ui_controls=1&ui_infos=0&ui_watermark=0",
+        embedUrl: "https://sketchfab.com/models/4a10fa408b044d039750fb4662d001eb/embed?autostart=1&ui_theme=dark",
         specs: [
-            { icon: <Maximize size={16} />, label: "Total Area", value: "4,500 Sq Ft" },
-            { icon: <Box size={16} />, label: "Footprint", value: "120' x 85'" },
-            { icon: <Shield size={16} />, label: "Configuration", value: "4 Bed / 5.5 Bath" },
-            { icon: <Zap size={16} />, label: "Energy Rating", value: "LEED Platinum" },
-        ],
-        materials: [
-            "Architectural-Grade Exposed Concrete",
-            "Thermally Broken Aluminum Glazing",
-            "Sustainable Teak Wood Cladding"
-        ],
-        targetMarket: "High-net-worth private clients and luxury vacation developers."
+            { label: "Total Area", value: "4,500 Sq Ft", icon: <Maximize className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> },
+            { label: "Footprint", value: "120' x 85'", icon: <Box className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> },
+            { label: "Configuration", value: "4 Bed / 5.5 Bath", icon: <Layout className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> },
+            { label: "Energy Rating", value: "LEED Platinum", icon: <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> }
+        ]
     },
     {
-        id: "community-center",
-        tabLabel: "Community Center",
-        title: "Lumina Civic Hub",
-        description: "A multi-use public facility engineered to accommodate high foot traffic while maintaining acoustic and spatial tranquility.",
-        embedUrl: "https://sketchfab.com/models/YOUR_MODEL_ID_2/embed?autostart=0&ui_controls=1&ui_infos=0&ui_watermark=0",
+        id: "apex-commercial",
+        title: "Apex Commercial",
+        description: "A mid-rise commercial hub engineered for premium corporate tenants with open-span floorplates.",
+        embedUrl: "https://sketchfab.com/models/80cbf376f9ef4abdaec5dcc32b6b5d6e/embed?autostart=0&ui_theme=dark",
         specs: [
-            { icon: <Maximize size={16} />, label: "Total Area", value: "18,200 Sq Ft" },
-            { icon: <Users size={16} />, label: "Capacity", value: "500+ Users" },
-            { icon: <Box size={16} />, label: "Core Features", value: "Atrium, Flex-Spaces" },
-            { icon: <Shield size={16} />, label: "Structural", value: "Long-span steel truss" },
-        ],
-        materials: [
-            "Acoustic Timber Baffling",
-            "High-Durability Terrazzo Flooring",
-            "Polycarbonate Translucent Panels"
-        ],
-        targetMarket: "Municipalities, private endowments, and community developers."
-    },
-    {
-        id: "townhome",
-        tabLabel: "Townhome Concept",
-        title: "Foundry Row",
-        description: "A scalable, high-density residential unit designed for premium urban infill projects to maximize ROI per square foot.",
-        embedUrl: "https://sketchfab.com/models/YOUR_MODEL_ID_3/embed?autostart=0&ui_controls=1&ui_infos=0&ui_watermark=0",
-        specs: [
-            { icon: <Maximize size={16} />, label: "Unit Area", value: "2,100 Sq Ft" },
-            { icon: <Users size={16} />, label: "Density", value: "12 Units / Acre" },
-            { icon: <Box size={16} />, label: "Levels", value: "3-Story Vertical" },
-            { icon: <Shield size={16} />, label: "Parking", value: "Integrated 2-Car" },
-        ],
-        materials: [
-            "Reclaimed Brick Veneer",
-            "Matte Black Steel Accents",
-            "Engineered Hardwood Intersect"
-        ],
-        targetMarket: "Urban residential developers and real estate investment trusts."
+            { label: "Total Area", value: "12,000 Sq Ft", icon: <Maximize className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> },
+            { label: "Floors", value: "6 Levels", icon: <Layout className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> },
+            { label: "Zoning", value: "Mixed-Use Commercial", icon: <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> },
+            { label: "Energy Rating", value: "LEED Gold", icon: <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> }
+        ]
     }
 ];
 
-// --- COMPONENT ---
 export default function InteractiveShowroom() {
-    const [activeModelIndex, setActiveModelIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const activeModel = SHOWROOM_MODELS[activeIndex];
 
     return (
-        <section id="showroom" className="py-16 md:py-32 px-5 md:px-12 bg-white relative border-b border-neutral-200">
+        <section id="showroom" className="py-16 md:py-36 px-5 md:px-12 bg-[#F9F9F7] text-neutral-900 relative border-t border-neutral-200">
             <div className="max-w-[1400px] mx-auto">
 
-                {/* Section Title */}
-                <div className="flex flex-col items-center text-center mb-8 md:mb-12">
-                    <span className="text-amber-600 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-3 md:mb-4 block font-sans">
-                        Interactive Showroom
-                    </span>
-                    <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tight">
-                        Explore Our Models.
-                    </h2>
+                {/* HUGE EDITORIAL HEADER */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-24 gap-8">
+                    <div className="max-w-4xl">
+                        <h2 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-neutral-900 tracking-tighter leading-[0.95] md:leading-[0.9] uppercase">
+                            Interactive <br />
+                            <span className="text-neutral-400">Showroom.</span>
+                        </h2>
+                    </div>
+
+                    {/* Model Selector Tabs - App-Style segmented controls on mobile */}
+                    <div className="flex w-full sm:w-max bg-neutral-200/50 p-1 rounded-sm shrink-0">
+                        {SHOWROOM_MODELS.map((model, idx) => (
+                            <button
+                                key={model.id}
+                                onClick={() => setActiveIndex(idx)}
+                                className={cn(
+                                    "flex-1 sm:flex-none px-3 sm:px-5 py-3 text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] transition-all duration-300 rounded-sm font-sans whitespace-nowrap",
+                                    activeIndex === idx
+                                        ? "bg-white text-amber-900 shadow-md"
+                                        : "text-neutral-500 hover:text-neutral-900 hover:bg-neutral-200"
+                                )}
+                            >
+                                {model.title}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Model Tabs Navigation (Using your awesome animated underline) */}
-                <div className="flex justify-start md:justify-center items-center gap-4 md:gap-8 border-b border-neutral-200 mb-10 md:mb-16 overflow-x-auto no-scrollbar snap-x w-full px-4 relative hide-scrollbar">
-                    {SHOWROOM_MODELS.map((model, idx) => (
-                        <button
-                            key={model.id}
-                            onClick={(e) => {
-                                setActiveModelIndex(idx);
-                                e.currentTarget.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-                            }}
-                            className={cn(
-                                "px-2 md:px-6 py-4 text-[10px] md:text-sm font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] transition-all duration-300 relative font-sans whitespace-nowrap snap-center",
-                                activeModelIndex === idx ? "text-amber-600" : "text-neutral-400 hover:text-neutral-600"
-                            )}
-                        >
-                            {model.tabLabel}
-                            {activeModelIndex === idx && (
-                                <motion.div
-                                    layoutId="activeTabIndicator"
-                                    className="absolute bottom-0 left-0 right-0 h-[3px] bg-amber-600"
-                                    initial={false}
-                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                />
-                            )}
-                        </button>
-                    ))}
-                </div>
+                {/* Main Content Grid - items-center ensures perfect vertical balancing */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20 items-center">
 
-                {/* Showroom Display Content */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
-
-                    {/* Left: 3D Embed Viewer */}
-                    <div className="lg:col-span-7 relative group bg-neutral-100 rounded-sm overflow-hidden border border-neutral-200 shadow-xl">
-                        <div className="relative w-full aspect-square md:aspect-[4/3] bg-neutral-950">
-                            <iframe
-                                key={SHOWROOM_MODELS[activeModelIndex].id}
-                                title={SHOWROOM_MODELS[activeModelIndex].title}
-                                className="absolute top-0 left-0 w-full h-full"
-                                src={SHOWROOM_MODELS[activeModelIndex].embedUrl}
-                                allow="autoplay; fullscreen; xr-spatial-tracking"
-                                allowFullScreen
-                            />
-                            <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white px-3 md:px-4 py-1.5 md:py-2 rounded-sm text-[8px] md:text-[9px] uppercase tracking-widest font-bold pointer-events-none group-hover:opacity-0 transition-opacity duration-500 flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-amber-500 animate-pulse" />
-                                Interact to Rotate
+                    {/* LEFT: 3D Viewer (Spans 7 cols) */}
+                    <div className="lg:col-span-7 w-full">
+                        <div className="relative w-full aspect-square md:aspect-[4/3] bg-neutral-900 rounded-none overflow-hidden shadow-2xl border border-neutral-200/50">
+                            {/* Loading Placeholder */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center text-neutral-500 z-0">
+                                <span className="relative flex h-3 w-3 mb-4">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                                </span>
+                                <span className="text-[10px] font-mono uppercase tracking-widest text-center px-4">Initialising 3D Module...</span>
                             </div>
+
+                            <AnimatePresence mode="wait">
+                                <motion.iframe
+                                    key={activeModel.id}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    title={activeModel.title}
+                                    className="absolute inset-0 w-full h-full z-10 border-0"
+                                    src={activeModel.embedUrl}
+                                    allow="autoplay; fullscreen; vr"
+                                />
+                            </AnimatePresence>
                         </div>
                     </div>
 
-                    {/* Right: Model Info & Specs */}
-                    <div className="lg:col-span-5 flex flex-col justify-center py-2 md:py-6">
+                    {/* RIGHT: Specifications Data (Spans 5 cols) */}
+                    <div className="lg:col-span-5 flex flex-col pt-4 lg:pt-0">
                         <AnimatePresence mode="wait">
                             <motion.div
-                                key={SHOWROOM_MODELS[activeModelIndex].id}
+                                key={activeModel.id}
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
-                                transition={{ duration: 0.5, ease: "easeOut" }}
-                                className="space-y-6 md:space-y-8"
+                                transition={{ duration: 0.4 }}
+                                className="flex flex-col"
                             >
-                                {/* Title & Description */}
-                                <div>
-                                    <h3 className="font-serif text-2xl md:text-4xl text-neutral-900 mb-3 md:mb-4">
-                                        {SHOWROOM_MODELS[activeModelIndex].title}
+                                <div className="mb-8">
+                                    <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl text-neutral-900 mb-4 sm:mb-5 leading-tight tracking-tight">
+                                        {activeModel.title}
                                     </h3>
-                                    <p className="text-neutral-500 font-light leading-relaxed text-xs md:text-base">
-                                        {SHOWROOM_MODELS[activeModelIndex].description}
+                                    <p className="text-neutral-500 text-sm md:text-lg font-sans leading-relaxed border-l-2 border-amber-500 pl-4 sm:pl-6">
+                                        {activeModel.description}
                                     </p>
                                 </div>
 
-                                {/* Specifications Grid (Your original layout) */}
-                                <div className="space-y-3 md:space-y-4 pt-4 md:pt-6 border-t border-neutral-200">
-                                    <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-400 mb-2">
-                                        Specifications
-                                    </h4>
-                                    {SHOWROOM_MODELS[activeModelIndex].specs.map((spec, idx) => (
-                                        <div key={idx} className="flex items-center justify-between p-3 md:p-4 bg-[#F9F9F7] border border-neutral-200 rounded-sm hover:border-amber-900/30 transition-colors group">
-                                            <div className="flex items-center gap-2 md:gap-3 text-neutral-500">
-                                                <span className="text-amber-800/70 group-hover:text-amber-800 transition-colors scale-90 md:scale-100">
-                                                    {spec.icon}
-                                                </span>
-                                                <span className="text-[8px] md:text-[10px] uppercase tracking-[0.2em] font-bold">
-                                                    {spec.label}
+                                {/* Specifications Table */}
+                                <div>
+                                    <span className="text-[9px] md:text-[10px] font-bold text-neutral-400 uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-5 block font-sans">
+                                        Core Specifications
+                                    </span>
+                                    <div className="flex flex-col space-y-2 sm:space-y-3">
+                                        {activeModel.specs.map((spec, i) => (
+                                            <div key={i} className="flex items-center justify-between border border-neutral-200 bg-white px-4 py-3 sm:px-6 sm:py-5 hover:border-amber-900/40 transition-all duration-300 shadow-sm hover:shadow-md">
+                                                <div className="flex items-center gap-3 sm:gap-4 text-amber-800 shrink-0 pr-4">
+                                                    <div className="p-1.5 sm:p-2 bg-amber-50 rounded-sm">
+                                                        {spec.icon}
+                                                    </div>
+                                                    <span className="text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-[0.1em] text-neutral-600 font-sans">
+                                                        {spec.label}
+                                                    </span>
+                                                </div>
+                                                <span className="text-[11px] sm:text-xs md:text-base font-medium text-neutral-900 font-serif text-right break-words">
+                                                    {spec.value}
                                                 </span>
                                             </div>
-                                            <span className="font-serif text-xs md:text-sm text-neutral-900 font-medium">
-                                                {spec.value}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Materials List */}
-                                <div className="pt-2">
-                                    <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-400 mb-4 border-b border-neutral-200 pb-2">
-                                        Key Materials
-                                    </h4>
-                                    <ul className="space-y-3">
-                                        {SHOWROOM_MODELS[activeModelIndex].materials.map((mat, idx) => (
-                                            <li key={idx} className="flex items-start gap-3 text-sm text-neutral-700 font-sans">
-                                                <Check className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" strokeWidth={2.5} />
-                                                <span>{mat}</span>
-                                            </li>
                                         ))}
-                                    </ul>
+                                    </div>
                                 </div>
-
-                                {/* Target Market */}
-                                <div className="pt-2">
-                                    <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-400 mb-2 border-b border-neutral-200 pb-2">
-                                        Target Market
-                                    </h4>
-                                    <p className="text-sm text-neutral-700 font-sans font-medium">
-                                        {SHOWROOM_MODELS[activeModelIndex].targetMarket}
-                                    </p>
-                                </div>
-
                             </motion.div>
                         </AnimatePresence>
                     </div>
 
                 </div>
             </div>
-
-            {/* Custom CSS to hide scrollbar on the tabs while keeping it scrollable on mobile */}
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                .hide-scrollbar::-webkit-scrollbar {
-                    display: none;
-                }
-                .hide-scrollbar {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }
-            `}} />
         </section>
     );
 }
