@@ -15,16 +15,6 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-  // Dangerously allow production builds to successfully complete even if
-  // your project has TypeScript errors.
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-
-  // @ts-ignore: Suppress the type error for the eslint property itself
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 };
 
 export default nextConfig;
